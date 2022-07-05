@@ -27,6 +27,14 @@
 *.lib
 
 # Executables
-*.exe
 *.out
 *.app
+
+# Folders
+.vs/**
+build/**
+
+# Visual studio files
+*.sln
+*.vcxproj
+*.vcxproj.user

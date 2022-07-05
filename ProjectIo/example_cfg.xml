@@ -1,0 +1,11 @@
+<io_configuration>
+	<id>DEBUG_EXAMPLE</id>
+	<settings>
+		<output structure="1"/> <!--structure=0 error, structure=1 individual files, structure=2 single file-->
+	</settings>
+	<included_assets count="3">
+		<asset id="texture.test0" src="test0.png" inputtype="png" outputtype="texRGBA"/>
+		<asset id="texture.test1" src="test1.png" inputtype="png" outputtype="texRGBA"/>
+		<asset id="texture.test2" src="test2.png" inputtype="png" outputtype="texRGBA"/>
+	</included_assets>
+</io_configuration>
