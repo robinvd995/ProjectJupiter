@@ -1,3 +1,6 @@
 [submodule "external/assimp"]
 	path = external/assimp
 	url = https://github.com/robinvd995/assimp
+[submodule "external/rapidxml"]
+	path = external/rapidxml
+	url = https://github.com/robinvd995/rapidxml
