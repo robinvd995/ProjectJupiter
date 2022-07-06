@@ -5,13 +5,24 @@ include "scripts/premake/project_europa.lua"
 
 -- library function includes --
 
+function linkAssimp()
+    links "assimp-vc142-mtd"
+    links "zlibstaticd"
+end
+
+function includeAssimp()
+    includedirs "external/assimp/include"
+end
+
 function includeRapidXml()
-
-    includedirs "lib/rapidxml"
-
+    includedirs "external/rapidxml"
 end
 
 -- basic functions --
+
+function defaultLibDirectories()
+    libdirs "lib"
+end
 
 function defaultOutDirectories()
     targetdir ("build/bin/" .. outputdir .. "/%{prj.name}")
@@ -59,6 +70,14 @@ function defaultDefines()
     }
 end
 
+function createExternalDependencies()
+    group "External_Dependencies"
+
+    --include "external/assimp"
+
+    group ""
+end
+
 -- variables --
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
@@ -67,10 +86,13 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- workspace --
 
 workspace "Project Jupiter"
-    filename "jupiter"
-    architecture "x64"
-    configurations { "Debug", "Release" }
+filename "jupiter"
+architecture "x64"
+configurations { "Debug", "Release" }
 
+
+-- setup dependencies --
+--createExternalDependencies()
 
 -- create projects --
 

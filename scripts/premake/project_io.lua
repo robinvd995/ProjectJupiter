@@ -9,15 +9,19 @@ function createProjectIo()
     cppdialect "C++17"
 
     defaultOutDirectories()
+    defaultLibDirectories()
     defaultFiles()
     defaultFilters()
     defaultIncludes()
     defaultDefines()
 
-    defines {
-        
-    }
+    defines {}
+    
+    includeJupiterCore()
 
     includeRapidXml()
-    includeJupiterCore()
+    includeAssimp()
+
+    linkAssimp()
+
 end

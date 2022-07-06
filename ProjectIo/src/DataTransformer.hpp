@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Transformers/DataTransformerPng.hpp"
+#include "Transformers/DataTransformerCollada.hpp"
 
 namespace Jupiter::Io {
 
-	typedef char* (*DataTransformFunction)(void*);
+	typedef char* (*DataTransformFunction)(LoadedAsset);
 
 	class DataTransformManager {
 

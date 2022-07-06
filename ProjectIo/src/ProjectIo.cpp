@@ -11,14 +11,28 @@
 
 namespace Jupiter::Io {
 
+#define JPT_IO_INPUT_IDENTIFIER_PNG "png"
+#define JPT_IO_INPUT_IDENTIFIER_COLLADA "collada"
+
+#define JPT_IO_OUTPUT_IDENTIFIER_TEX_RGBA "tex_rgba"
+#define JPT_IO_OUTPUT_IDENTIFIER_MODEL_STATIC "model_static"
+
+	static std::string s_FileOutputIdentifiers[] = {
+		JPT_IO_FILE_TYPE_UNDEFINED_IDENTIFIER,
+		"tex_rgba",
+		"model_static"
+	};
+
 	enum class EnumFileInputType {
 		UNDEFINED = JPT_IO_FILE_TYPE_UNDEFINED_ID,
 		PNG = 1,
+		COLLADA = 2,
 	};
 
 	enum class EnumFileOutputType {
 		UNDEFINED = JPT_IO_FILE_TYPE_UNDEFINED_ID,
-		TEX_RGBA = 1
+		TEX_RGBA = 1,
+		MODEL_STATIC = 2,
 	};
 
 	ProjectIO::ProjectIO(std::string& cfgFile) : 
@@ -38,13 +52,16 @@ namespace Jupiter::Io {
 	void ProjectIO::init() {
 
 		// Init input file types
-		FileTypeManager::addInputFileType((uint32_t)EnumFileInputType::PNG, "png");
+		FileTypeManager::addInputFileType((uint32_t)EnumFileInputType::PNG, JPT_IO_INPUT_IDENTIFIER_PNG);
+		FileTypeManager::addInputFileType((uint32_t)EnumFileInputType::COLLADA, JPT_IO_INPUT_IDENTIFIER_COLLADA);
 
 		// Init output file types
-		FileTypeManager::addOutputFileType((uint32_t)EnumFileOutputType::TEX_RGBA, "texRGBA");
+		FileTypeManager::addOutputFileType((uint32_t)EnumFileOutputType::TEX_RGBA, JPT_IO_OUTPUT_IDENTIFIER_TEX_RGBA);
+		FileTypeManager::addOutputFileType((uint32_t)EnumFileOutputType::MODEL_STATIC, JPT_IO_OUTPUT_IDENTIFIER_MODEL_STATIC);
 
 		// Init data transformers
 		DataTransformManager::addDataTransformer((uint32_t)EnumFileInputType::PNG, (uint32_t)EnumFileOutputType::TEX_RGBA, &transformPngToTexRGBA);
+		DataTransformManager::addDataTransformer((uint32_t)EnumFileInputType::COLLADA, (uint32_t)EnumFileOutputType::MODEL_STATIC, &transformColladaToStaticModel);
 	}
 
 	bool ProjectIO::load(std::string& error) {
@@ -140,7 +157,7 @@ namespace Jupiter::Io {
 				continue;
 			}
 
-			transformFunction(nullptr);
+			transformFunction({});
 
 			bool srcExists = std::filesystem::exists(std::string(asset.m_Source));
 			if (!srcExists) { ioAssetError(assetId, "MISSING_FILE", "Cannot find source file '" + assetSrc + "'"); continue; }

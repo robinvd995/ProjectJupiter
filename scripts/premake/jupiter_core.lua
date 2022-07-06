@@ -15,7 +15,7 @@ function createJupiterCore()
     defaultIncludes()
     defaultDefines()
 
-    includedirs { "lib/rapidxml" }
+    includeRapidXml()
 
 end
 
