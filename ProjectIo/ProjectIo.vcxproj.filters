@@ -38,6 +38,8 @@
     <ClInclude Include="src\Transformers\DataTransformerPng.hpp">
       <Filter>Transformers</Filter>
     </ClInclude>
+    <ClInclude Include="src\AssetProperties.h" />
+    <ClInclude Include="src\Properties.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
@@ -48,5 +50,6 @@
       <Filter>Loaders</Filter>
     </ClCompile>
     <ClCompile Include="src\ProjectIo.cpp" />
+    <ClCompile Include="src\AssetProperties.cpp" />
   </ItemGroup>
 </Project>

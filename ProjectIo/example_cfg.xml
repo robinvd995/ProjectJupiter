@@ -3,8 +3,12 @@
 	<settings>
 		<output structure="1"/> <!--structure=0 error, structure=1 individual files, structure=2 single file-->
 	</settings>
-	<included_assets count="3">
-		<asset id="texture.texRGBA" src="test.png" inputtype="png" outputtype="tex_rgba"/>
-		<asset id="collada.model_static" src="test.dae" inputtype="collada" outputtype="model_static"/>
+	<included_assets count="2">
+		<asset id="texture.texRGBA" src="test.png" inputtype="png" outputtype="tex_rgba">
+			<texture_properties/>
+		</asset>
+		<asset id="collada.model_static" src="test.dae" inputtype="collada" outputtype="model_static">
+			<collada_properties/>
+		</asset>
 	</included_assets>
 </io_configuration>

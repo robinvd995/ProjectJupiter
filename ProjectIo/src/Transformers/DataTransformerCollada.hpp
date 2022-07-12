@@ -1,6 +1,6 @@
 #pragma once
 
-#include <JupiterCore/Log.h>
+#include <JupiterCore/Log.hpp>
 
 #include "Loaders/ColladaLoader.h"
 

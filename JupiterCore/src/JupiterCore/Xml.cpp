@@ -110,6 +110,10 @@ namespace Jupiter::Xml {
 		return atoll(m_Node->first_attribute(key)->value());
 	}
 
+	bool XmlNode::hasChildNode(const char* name) const {
+		return m_Node->first_node(name) != nullptr;
+	}
+
 	const XmlNode XmlNode::getFirstChild(const char* name) const {
 		return XmlNode(m_Document, m_Node->first_node(name));
 	}

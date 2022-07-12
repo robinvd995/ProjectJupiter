@@ -3,45 +3,24 @@
 #include <memory>
 #include <filesystem>
 
-#include "JupiterCore/Log.h"
+#include "JupiterCore/Core.h"
+#include "JupiterCore/Log.hpp"
 #include "JupiterCore/Xml.h"
 
 #include "FileTypes.hpp"
 #include "DataTransformer.hpp"
+#include "AssetProperties.h"
 
 namespace Jupiter::Io {
 
-#define JPT_IO_INPUT_IDENTIFIER_PNG "png"
-#define JPT_IO_INPUT_IDENTIFIER_COLLADA "collada"
-
-#define JPT_IO_OUTPUT_IDENTIFIER_TEX_RGBA "tex_rgba"
-#define JPT_IO_OUTPUT_IDENTIFIER_MODEL_STATIC "model_static"
-
-	static std::string s_FileOutputIdentifiers[] = {
-		JPT_IO_FILE_TYPE_UNDEFINED_IDENTIFIER,
-		"tex_rgba",
-		"model_static"
-	};
-
-	enum class EnumFileInputType {
-		UNDEFINED = JPT_IO_FILE_TYPE_UNDEFINED_ID,
-		PNG = 1,
-		COLLADA = 2,
-	};
-
-	enum class EnumFileOutputType {
-		UNDEFINED = JPT_IO_FILE_TYPE_UNDEFINED_ID,
-		TEX_RGBA = 1,
-		MODEL_STATIC = 2,
-	};
-
-	ProjectIO::ProjectIO(std::string& cfgFile) : 
-		m_ConfigFilePath(cfgFile)
+	ProjectIo::ProjectIo(std::string& cfgFile, init_func func) :
+		m_ConfigFilePath(cfgFile),
+		m_InitFunction(func)
 	{
-
+		
 	}
 
-	ProjectIO::~ProjectIO() {
+	ProjectIo::~ProjectIo() {
 
 	}
 
@@ -49,22 +28,28 @@ namespace Jupiter::Io {
 		JPT_ERROR("The following error occurred " + errortype + " for asset with id '" + id + "'\n    " + errormessage);
 	}
 
-	void ProjectIO::init() {
+	void ProjectIo::run() {
+		
+		// Initialize Managers
+		AssetPropertyManager::s_Instance = new AssetPropertyManager();
+		FileTypeManager::s_Instance = new FileTypeManager();
+		DataTransformManager::s_Instance = new DataTransformManager();
 
-		// Init input file types
-		FileTypeManager::addInputFileType((uint32_t)EnumFileInputType::PNG, JPT_IO_INPUT_IDENTIFIER_PNG);
-		FileTypeManager::addInputFileType((uint32_t)EnumFileInputType::COLLADA, JPT_IO_INPUT_IDENTIFIER_COLLADA);
+		// Run the init function given to this object during its creation
+		m_InitFunction();
 
-		// Init output file types
-		FileTypeManager::addOutputFileType((uint32_t)EnumFileOutputType::TEX_RGBA, JPT_IO_OUTPUT_IDENTIFIER_TEX_RGBA);
-		FileTypeManager::addOutputFileType((uint32_t)EnumFileOutputType::MODEL_STATIC, JPT_IO_OUTPUT_IDENTIFIER_MODEL_STATIC);
+		std::string error;
+		if (!load(error)) { std::cout << error << std::endl; return; }
+		if (!execute(error)) { std::cout << error << std::endl; return; }
+		if (!release(error)) { std::cout << error << std::endl; return; }
 
-		// Init data transformers
-		DataTransformManager::addDataTransformer((uint32_t)EnumFileInputType::PNG, (uint32_t)EnumFileOutputType::TEX_RGBA, &transformPngToTexRGBA);
-		DataTransformManager::addDataTransformer((uint32_t)EnumFileInputType::COLLADA, (uint32_t)EnumFileOutputType::MODEL_STATIC, &transformColladaToStaticModel);
+		// Delete Managers
+		delete AssetPropertyManager::s_Instance;
+		delete FileTypeManager::s_Instance;
+		delete DataTransformManager::s_Instance;
 	}
 
-	bool ProjectIO::load(std::string& error) {
+	bool ProjectIo::load(std::string& error) {
 		JPT_INFO("Loading config file: " + m_ConfigFilePath);
 
 		bool cfgExists = std::filesystem::exists(m_ConfigFilePath);
@@ -135,13 +120,19 @@ namespace Jupiter::Io {
 			JPT_INFO("Loaded asset: id='" + id + "', src='" + src + "', inputtype='" + fit.m_Identifier + "', outputtype='" + fot.m_Identifier + "'");
 			assetBuffer.push_back(asset);
 
+			//Properties
+			bool hasTextureProperties = node.hasChildNode("texture_properties");
+			if (!hasTextureProperties) ioAssetError(id, "TEST", "no texture properties node");
+			//const Xml::XmlNode texPropsNode = node.getFirstChild("texture_properties");
+
+
 			return true;
 		});
 
 		return true;
 	}
 
-	bool ProjectIO::execute(std::string& error) {
+	bool ProjectIo::execute(std::string& error) {
 		for (IoAsset& asset : m_Config.m_Assets.m_AssetBuffer) {
 			std::string assetId = std::string(asset.m_Id, asset.m_Id + asset.m_IdSize);
 			std::string assetSrc = std::string(asset.m_Source, asset.m_Source + asset.m_SourceSize);
@@ -165,7 +156,7 @@ namespace Jupiter::Io {
 		return true;
 	}
 
-	bool ProjectIO::release(std::string& error) {
+	bool ProjectIo::release(std::string& error) {
 
 		// Free the asset buffer
 		return true;

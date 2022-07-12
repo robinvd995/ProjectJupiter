@@ -2,7 +2,7 @@
 
 #include "Loaders/PngLoader.h"
 
-#include <JupiterCore/Log.h>
+#include <JupiterCore/Log.hpp>
 
 namespace Jupiter::Io {
 

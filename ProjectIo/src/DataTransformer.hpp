@@ -16,7 +16,7 @@ namespace Jupiter::Io {
 		void localAddDataTransformer(uint32_t inputtype, uint32_t outputtype, DataTransformFunction func) { m_DataTransformFunctions[inputtype][outputtype] = func; }
 		DataTransformFunction localGetTransformFunction(uint32_t inputtype, uint32_t outputtype) { return m_DataTransformFunctions[inputtype][outputtype]; }
 
-		static DataTransformManager* getInstance() { if (!s_Instance) s_Instance = new DataTransformManager(); return s_Instance; }
+		static DataTransformManager* getInstance() { return s_Instance; }
 
 		DataTransformManager() {}
 		DataTransformManager(DataTransformManager&) = delete;
@@ -25,5 +25,7 @@ namespace Jupiter::Io {
 		DataTransformFunction m_DataTransformFunctions[JPT_IO_FILE_TYPE_INPUT_AMOUNT][JPT_IO_FILE_TYPE_OUTPUT_AMOUNT] = { };
 
 		inline static DataTransformManager* s_Instance = nullptr;
+
+		friend class ProjectIo;
 	};
 }

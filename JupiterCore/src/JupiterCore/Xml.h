@@ -75,6 +75,7 @@ namespace Jupiter::Xml {
 		bool getAttributeAsBool(const char* key) const;
 		uint64_t getAttributeAsUint64(const char* key) const;
 
+		bool hasChildNode(const char* name) const;
 		const XmlNode getFirstChild(const char* name) const;
 
 		void appendNode(XmlNode& node);

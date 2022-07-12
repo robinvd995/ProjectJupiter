@@ -9,7 +9,25 @@
 #define JPT_IO_FILE_TYPE_INPUT_AMOUNT 16					// TODO DOCUMENTATION
 #define JPT_IO_FILE_TYPE_OUTPUT_AMOUNT 16					// TODO DOCUMENTATION
 
+#define JPT_IO_FILE_TYPE_INPUT_IDENTIFIER_PNG "png"
+#define JPT_IO_FILE_TYPE_INPUT_IDENTIFIER_COLLADA "collada"
+
+#define JPT_IO_FILE_TYPE_OUTPUT_IDENTIFIER_TEX_RGBA "tex_rgba"
+#define JPT_IO_FILE_TYPE_OUTPUT_IDENTIFIER_MODEL_STATIC "model_static"
+
 namespace Jupiter::Io {
+
+	enum class EnumFileInputType {
+		UNDEFINED = JPT_IO_FILE_TYPE_UNDEFINED_ID,
+		PNG = 1,
+		COLLADA = 2,
+	};
+
+	enum class EnumFileOutputType {
+		UNDEFINED = JPT_IO_FILE_TYPE_UNDEFINED_ID,
+		TEX_RGBA = 1,
+		MODEL_STATIC = 2,
+	};
 
 	struct FileType {
 		uint32_t m_Id = 0;
@@ -54,7 +72,7 @@ namespace Jupiter::Io {
 		FileType& localGetInputTypeFromId(uint32_t id) { return m_InputFileTypes[id]; }
 		FileType& localGetOutputTypeFromId(uint32_t id) { return m_OutputFileTypes[id]; }
 
-		static FileTypeManager* getInstance() { if (!s_Instance) s_Instance = new FileTypeManager(); return s_Instance; }
+		static FileTypeManager* getInstance() { return s_Instance; }
 
 		FileTypeManager() {
 			localAddInputFileType(JPT_IO_FILE_TYPE_UNDEFINED_ID, JPT_IO_FILE_TYPE_UNDEFINED_IDENTIFIER);
@@ -70,6 +88,7 @@ namespace Jupiter::Io {
 		inline static FileTypeManager* s_Instance;
 
 		friend class FileTypeParser;
+		friend class ProjectIo;
 	};
 
 	class FileTypeParser {

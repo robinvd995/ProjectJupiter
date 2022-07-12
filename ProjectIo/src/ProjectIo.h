@@ -8,16 +8,19 @@
 
 namespace Jupiter::Io {
 
-	class ProjectIO {
+	typedef void (*init_func)(void);
+
+	class ProjectIo {
 
 	public:
-		ProjectIO() = delete;
-		ProjectIO(ProjectIO&) = delete;
-		ProjectIO(std::string& cfgFile);
-		~ProjectIO();
+		ProjectIo() = delete;
+		ProjectIo(ProjectIo&) = delete;
+		ProjectIo(std::string& cfgFile, init_func func);
+		~ProjectIo();
 
-		void init();
+		void run();
 
+	private:
 		bool load(std::string& error);
 		bool execute(std::string& error);
 		bool release(std::string& error);
@@ -25,5 +28,6 @@ namespace Jupiter::Io {
 	private:
 		std::string m_ConfigFilePath;
 		IoConfig m_Config;
+		init_func m_InitFunction = nullptr;
 	};
 }
