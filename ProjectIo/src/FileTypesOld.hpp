@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include <string>
 #include <vector>
@@ -9,33 +9,29 @@
 #define JPT_IO_FILE_TYPE_INPUT_AMOUNT 16					// TODO DOCUMENTATION
 #define JPT_IO_FILE_TYPE_OUTPUT_AMOUNT 16					// TODO DOCUMENTATION
 
-#define JPT_IO_FILE_TYPE_INPUT_IDENTIFIER_PNG "png"
-#define JPT_IO_FILE_TYPE_INPUT_IDENTIFIER_COLLADA "collada"
-
-#define JPT_IO_FILE_TYPE_OUTPUT_IDENTIFIER_TEX_RGBA "tex_rgba"
-#define JPT_IO_FILE_TYPE_OUTPUT_IDENTIFIER_MODEL_STATIC "model_static"
-
 namespace Jupiter::Io {
 
-	enum class EnumFileInputType {
-		UNDEFINED = JPT_IO_FILE_TYPE_UNDEFINED_ID,
-		PNG = 1,
-		COLLADA = 2,
+	enum EnumFileUsage {
+		FILE_USAGE_INPUT					= 0,
+		FILE_USAGE_OUTPUT					= 1
 	};
 
-	enum class EnumFileOutputType {
-		UNDEFINED = JPT_IO_FILE_TYPE_UNDEFINED_ID,
-		TEX_RGBA = 1,
-		MODEL_STATIC = 2,
+	enum EnumFileType {
+		FILE_TYPE_UNDEFINED					= 0,
+		FILE_TYPE_PNG						= 1,
+		FILE_TYPE_COLLADA					= 2,
+		FILE_TYPE_TEX_RGBA					= 3,
+		FILE_TYPE_MODEL_STATIC				= 4
 	};
 
 	struct FileType {
-		uint32_t m_Id = 0;
-		std::string m_Identifier;
+		const uint32_t m_Id = 0;
+		const std::string m_Identifier;
+		const uint32_t m_FileUsage;
 
-		FileType() : m_Id(JPT_IO_FILE_TYPE_UNDEFINED_ID), m_Identifier(JPT_IO_FILE_TYPE_UNDEFINED_IDENTIFIER) {};
+		FileType() : m_Id(JPT_IO_FILE_TYPE_UNDEFINED_ID), m_Identifier(JPT_IO_FILE_TYPE_UNDEFINED_IDENTIFIER), m_FileUsage(FILE_USAGE_INPUT) {};
 		FileType(FileType&) = delete;
-		FileType(uint32_t id, std::string identifier) : m_Id(id), m_Identifier(identifier) {}
+		FileType(const uint32_t id, const std::string& identifier, const uint32_t file_usage) : m_Id(id), m_Identifier(identifier), m_FileUsage(file_usage) {}
 
 		bool isValid() { return m_Id != JPT_IO_FILE_TYPE_UNDEFINED_ID; }
 	};
@@ -115,4 +111,4 @@ namespace Jupiter::Io {
 			return FileTypeManager::s_Instance->m_OutputFileTypes[JPT_IO_FILE_TYPE_UNDEFINED_ID];
 		}
 	};
-}
+}*/

@@ -5,7 +5,7 @@
 	</settings>
 	<included_assets count="2">
 		<asset id="texture.texRGBA" src="test.png" inputtype="png" outputtype="tex_rgba">
-			<texture_properties/>
+			<texture_properties min_filter="TEXTURE_NEAREST" mag_filter="TEXTURE_NEAREST" wrap_s="TEXTURE_CLAMP_TO_EDGE" wrap_t="TEXTURE_CLAMP_TO_EDGE" wrap_r="TEXTURE_CLAMP_TO_EDGE"/>
 		</asset>
 		<asset id="collada.model_static" src="test.dae" inputtype="collada" outputtype="model_static">
 			<collada_properties/>

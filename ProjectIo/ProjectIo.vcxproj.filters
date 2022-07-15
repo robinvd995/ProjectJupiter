@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{3824E0A7-24C6-0A7E-0D81-1ED2F9C191CE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Loaders">
+      <UniqueIdentifier>{0F200AE8-7BFF-8883-8417-145AF075EFE4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Transformers">
+      <UniqueIdentifier>{8B8ABF39-77ED-4EDE-2073-87940CB51A61}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Assets\AssetBase.h">
+      <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Assets\ModelAsset.hpp">
+      <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CommandParser.hpp" />
+    <ClInclude Include="src\DataTransformer.hpp" />
+    <ClInclude Include="src\FileTypesOld.hpp" />
+    <ClInclude Include="src\IoConfig.h" />
+    <ClInclude Include="src\Loaders\ColladaLoader.h">
+      <Filter>Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Loaders\LoaderCommon.h">
+      <Filter>Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Loaders\PngLoader.h">
+      <Filter>Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ProjectIo.h" />
+    <ClInclude Include="src\Transformers\DataTransformerCollada.hpp">
+      <Filter>Transformers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Transformers\DataTransformerPng.hpp">
+      <Filter>Transformers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetPropertiesOld.h" />
+    <ClInclude Include="src\PropertiesOld.h" />
+    <ClInclude Include="src\Core.h" />
+    <ClInclude Include="src\PropertyDefinitions.h" />
+    <ClInclude Include="src\Properties.h" />
+    <ClInclude Include="src\FileTypes.h" />
+    <ClInclude Include="src\FileDefinitions.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\Loaders\ColladaLoader.cpp">
+      <Filter>Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Loaders\PngLoader.cpp">
+      <Filter>Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ProjectIo.cpp" />
+    <ClCompile Include="src\AssetPropertiesOld.cpp" />
+    <ClCompile Include="src\Properties.cpp" />
+    <ClCompile Include="src\FileTypes.cpp" />
+  </ItemGroup>
+</Project>

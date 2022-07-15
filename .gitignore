@@ -40,4 +40,8 @@ build/**
 *.vcxproj.user
 *.vcxproj.filters
 *.filters
+<<<<<<< Updated upstream
 external/assimp
+=======
+ProjectIo/ProjectIo.vcxproj.filters
+>>>>>>> Stashed changes

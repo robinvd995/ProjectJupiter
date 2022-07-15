@@ -22,7 +22,7 @@ namespace Jupiter::Io {
 		DataTransformManager(DataTransformManager&) = delete;
 
 	private:
-		DataTransformFunction m_DataTransformFunctions[JPT_IO_FILE_TYPE_INPUT_AMOUNT][JPT_IO_FILE_TYPE_OUTPUT_AMOUNT] = { };
+		DataTransformFunction m_DataTransformFunctions[1][1] = { };
 
 		inline static DataTransformManager* s_Instance = nullptr;
 

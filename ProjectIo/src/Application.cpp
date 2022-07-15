@@ -4,8 +4,9 @@
 #include "CommandParser.hpp"
 #include "ProjectIo.h"
 
-#include "AssetProperties.h"
 #include "Properties.h"
+#include "PropertyDefinitions.h"
+#include "FileDefinitions.h"
 
 #include "JupiterCore/Core.h"
 #include "JupiterCore/Formatter.hpp"
@@ -14,25 +15,37 @@
 inline static void initProjectIoFunc() {
 	using namespace Jupiter::Io;
 
-	// Init input file types
-	FileTypeManager::addInputFileType((uint32_t)EnumFileInputType::PNG, JPT_IO_FILE_TYPE_INPUT_IDENTIFIER_PNG);
-	FileTypeManager::addInputFileType((uint32_t)EnumFileInputType::COLLADA, JPT_IO_FILE_TYPE_INPUT_IDENTIFIER_COLLADA);
+	FileTypeManager::addFileType(FILE_TYPE_PNG, FILE_USAGE_INPUT, { "png" });
+	FileTypeManager::addFileType(FILE_TYPE_COLLADA, FILE_USAGE_INPUT, { "collada", "dae" });
+	FileTypeManager::addFileType(FILE_TYPE_TEX_RGBA, FILE_USAGE_OUTPUT, { "tex_rgba" });
+	FileTypeManager::addFileType(FILE_TYPE_MODEL_STATIC, FILE_USAGE_OUTPUT, { "model_static"});
 
-	// Init output file types
-	FileTypeManager::addOutputFileType((uint32_t)EnumFileOutputType::TEX_RGBA, JPT_IO_FILE_TYPE_OUTPUT_IDENTIFIER_TEX_RGBA);
-	FileTypeManager::addOutputFileType((uint32_t)EnumFileOutputType::MODEL_STATIC, JPT_IO_FILE_TYPE_OUTPUT_IDENTIFIER_MODEL_STATIC);
+	// PropertyValueTemplates
+	PropertyValueTemplate* pvTextureNearest = PropertyManager::addPropertyValueTemplate(PV_TEXTURE_NEAREST, "nearest");
+	PropertyValueTemplate* pvTextureLinear = PropertyManager::addPropertyValueTemplate(PV_TEXTURE_LINEAR, "linear");
+	PropertyValueTemplate* pvTextureNearestMipmapNearest = PropertyManager::addPropertyValueTemplate(PV_TEXTURE_NEAREST_MIPMAP_NEAREST, "nearest_mipmap_nearest");
+	PropertyValueTemplate* pvTextureLinearMipmapNearest = PropertyManager::addPropertyValueTemplate(PV_TEXTURE_LINEAR_MIPMAP_NEAREST, "linear_mipmap_nearest");
+	PropertyValueTemplate* pvTextureNearestMipmapLinear = PropertyManager::addPropertyValueTemplate(PV_TEXTURE_NEAREST_MIPMAP_LINEAR, "nearest_mipmap_linear");
+	PropertyValueTemplate* pvTextureLinearMipmapLinear = PropertyManager::addPropertyValueTemplate(PV_TEXTURE_LINEAR_MIPMAP_LINEAR, "linear_mipmap_linear");
 
-	// Texture property group setup
-	AssetPropertyGroup* texturePropertyGroup = AssetPropertyManager::registerPropertyGroup((uint32_t)AssetPropertyGroups::TEXTURE_PROPERTIES, "texture_properties", 5);
-	texturePropertyGroup->addProperty(0, (uint32_t)AssetPropertyIdentifiers::TEXTURE_MIN_FILTER, "texture_min_filter");
-	texturePropertyGroup->addProperty(1, (uint32_t)AssetPropertyIdentifiers::TEXTURE_MAG_FILTER, "texture_mag_filter");
-	texturePropertyGroup->addProperty(2, (uint32_t)AssetPropertyIdentifiers::TEXTURE_WRAP_S, "texture_wrap_s");
-	texturePropertyGroup->addProperty(3, (uint32_t)AssetPropertyIdentifiers::TEXTURE_WRAP_T, "texture_wrap_t");
-	texturePropertyGroup->addProperty(4, (uint32_t)AssetPropertyIdentifiers::TEXTURE_WRAP_R, "texture_wrap_r");
+	PropertyValueTemplate* pvTextureRepeat = PropertyManager::addPropertyValueTemplate(PV_TEXTURE_REPEAT, "repeat");
+	PropertyValueTemplate* pvTextureClampToEdge = PropertyManager::addPropertyValueTemplate(PV_TEXTURE_CLAMP_TO_EDGE, "clamp_to_edge");
+	PropertyValueTemplate* pvTextureClampToBorder = PropertyManager::addPropertyValueTemplate(PV_TEXTURE_CLAMP_TO_BORDER, "clamp_to_border");
+	PropertyValueTemplate* pvTextureMirroredRepeat = PropertyManager::addPropertyValueTemplate(PV_TEXTURE_MIRRORED_REPEAT, "mirrored_repeat");
+	PropertyValueTemplate* pvTextureMirroredClampToEdge = PropertyManager::addPropertyValueTemplate(PV_TEXTURE_MIRRORED_CLAMP_TO_EDGE, "mirrored_clamp_to_edge");
 
-	// Model property group setup
-	AssetPropertyGroup* modelPropertyGroup = AssetPropertyManager::registerPropertyGroup((uint32_t)AssetPropertyGroups::MODEL_PROPERTIES, "model_properties", 1);
-	modelPropertyGroup->addProperty(0, 0, "test");
+	// PropertyTemplates
+	PropertyTemplate* ptTextureMinFilter = PropertyManager::addPropertyTemplate(PI_TEXTURE_MIN_FILTER, "min_filter", { pvTextureNearest, pvTextureLinear, pvTextureNearestMipmapNearest, pvTextureLinearMipmapNearest, pvTextureNearestMipmapLinear, pvTextureLinearMipmapLinear });
+	PropertyTemplate* ptTextureMagFilter = PropertyManager::addPropertyTemplate(PI_TEXTURE_MAG_FILTER, "mag_filter", { pvTextureNearest , pvTextureLinear });
+	PropertyTemplate* ptTextureWrapS = PropertyManager::addPropertyTemplate(PI_TEXTURE_WRAP_S, "wrap_s", { pvTextureRepeat, pvTextureClampToEdge, pvTextureClampToBorder, pvTextureMirroredRepeat, pvTextureMirroredClampToEdge }) ;
+	PropertyTemplate* ptTextureWrapT = PropertyManager::addPropertyTemplate(PI_TEXTURE_WRAP_T, "wrap_t", { pvTextureRepeat, pvTextureClampToEdge, pvTextureClampToBorder, pvTextureMirroredRepeat, pvTextureMirroredClampToEdge });
+	PropertyTemplate* ptTextureWrapR = PropertyManager::addPropertyTemplate(PI_TEXTURE_WRAP_R, "wrap_r", { pvTextureRepeat, pvTextureClampToEdge, pvTextureClampToBorder, pvTextureMirroredRepeat, pvTextureMirroredClampToEdge });
+
+	// PropertyGroupTemplates
+	PropertyGroupTemplate* pgTexture = PropertyManager::addPropertyGroupTemplate(PG_GROUP_TEXTURE, "texture_properties", { ptTextureMinFilter, ptTextureMagFilter, ptTextureWrapS, ptTextureWrapT, ptTextureWrapR });
+
+	// PropertyContainerTemplates
+	//-- PropertyContainerTemplate* pcTexRgba = PropertyManager::addPropertyContainerTemplate(FILE_TYPE_PNG, FILE_TYPE_TEX_RGBA, { pgTexture });
 
 	// Init data transformers
 	//DataTransformManager::addDataTransformer((uint32_t)EnumFileInputType::PNG, (uint32_t)EnumFileOutputType::TEX_RGBA, &transformPngToTexRGBA);
@@ -50,18 +63,6 @@ int main(int argc, char* argv[])
 	
     Jupiter::Io::ProjectIo projectIo(cfgLocation, initProjectIoFunc);
     projectIo.run();
-
-	//Jupiter::Formatter* formatter = Jupiter::Formatter::createFormatter({'[', ']', 2});
-	//std::cout << formatter->formatString("test [0], [1], [2]; end test", 5, false, "something", 879) << std::endl;
-
-	//JPT_INFO("info [0], [1], [2]; end test", 5, false, "something", 879);
-	//JPT_ERROR("info [0], [1], [2]; end test", 5, false, "something", 879);
-	//JPT_WARN("info [0], [1], [2]; end test", 5, false, "something", 879);
-	//JPT_TRACE("info [0], [1], [2]; end test", 5, false, "something", 879);
-	//logger->info("info [0], [1], [2]; end test", 5, false, "something", 879);
-	//logger->error("error [0], [1], [2]; end test", 5, false, "something", 879);
-	//logger->warn("warn [0], [1], [2]; end test", 5, false, "something", 879);
-	//logger->trace("trace [0], [1], [2]; end test", 5, false, "something", 879);
 
 	Jupiter::Core::deleteCoreLogger();
 }

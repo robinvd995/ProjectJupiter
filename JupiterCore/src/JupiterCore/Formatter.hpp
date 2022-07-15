@@ -76,6 +76,7 @@ namespace Jupiter {
 
 	private:
 		inline static void addStringToList(std::vector<std::string>& list, std::string& str) { list.push_back(str); }
+		inline static void addStringToList(std::vector<std::string>& list) { }
 
 		inline static std::string toString(long long val) { return std::to_string(val); }
 		inline static std::string toString(double val) { return std::to_string(val); }
@@ -87,5 +88,7 @@ namespace Jupiter {
 		inline static std::string toString(unsigned int val) { return std::to_string(val); }
 		inline static std::string toString(unsigned long val) { return std::to_string(val); }
 		inline static std::string toString(const char* val) { return std::string(val); }
+		inline static std::string toString(std::string& val) { return val; }
+		inline static std::string toString(const std::string& val) { val; }
 	};
 }

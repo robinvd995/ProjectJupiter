@@ -3,7 +3,10 @@
 #include <vector>
 #include <string>
 
-#include "FileTypes.hpp"
+#include "Properties.h"
+#include "FileTypes.h"
+
+//#include "FileTypes.hpp"
 
 #define JPT_IO_ASSET_ID_MAX_LENGTH 64
 #define JPT_IO_ASSET_SOURCE_MAX_LENGTH 128
@@ -19,8 +22,8 @@ namespace Jupiter::Io {
 	};
 
 	struct IoAsset {
-		uint32_t m_InputType = JPT_IO_FILE_TYPE_UNDEFINED_ID;
-		uint32_t m_OutputType = JPT_IO_FILE_TYPE_UNDEFINED_ID;
+		FileType* m_InputType = nullptr;
+		FileType* m_OutputType = nullptr;
 		char m_Id[JPT_IO_ASSET_ID_MAX_LENGTH];
 		char m_Source[JPT_IO_ASSET_SOURCE_MAX_LENGTH];
 		uint32_t m_IdSize = 0, m_SourceSize = 0;

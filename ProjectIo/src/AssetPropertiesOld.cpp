@@ -1,4 +1,4 @@
-#include "AssetProperties.h"
+#include "AssetPropertiesOld.h"
 
 #include <iostream>
 #include <memory>

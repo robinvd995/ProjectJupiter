@@ -4,8 +4,6 @@
 #include <vector>
 #include <string>
 
-#include "Properties.h"
-
 //#define JPT_IO_PROPERTIES_CONTAINER_MAX 16
 
 //#define JPT_IO_IGNORE_VALID_PROPERTY_VALUES
