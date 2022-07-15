@@ -39,3 +39,4 @@ build/**
 *.vcxproj
 *.vcxproj.user
 *.vcxproj.filters
+*.filters
