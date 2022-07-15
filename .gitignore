@@ -40,3 +40,4 @@ build/**
 *.vcxproj.user
 *.vcxproj.filters
 *.filters
+external/assimp
