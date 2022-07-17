@@ -12,7 +12,6 @@
 #include "DataTransformer.hpp"
 #include "Properties.h"
 #include "FileTypes.h"
-//#include "AssetProperties.h"
 
 namespace Jupiter::Io {
 
@@ -62,7 +61,7 @@ namespace Jupiter::Io {
 	}
 
 	bool ProjectIo::load(std::string& error) {
-		//JPT_IO_INFO("Loading config file: [0]", m_ConfigFilePath);
+		JPT_IO_INFO("Loading config file: [0]", m_ConfigFilePath);
 
 		bool cfgExists = std::filesystem::exists(m_ConfigFilePath);
 		if (!cfgExists) { error = "Can't find config file with name " + m_ConfigFilePath + "'!"; return false; }

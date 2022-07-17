@@ -27,24 +27,28 @@ namespace Jupiter {
 		}
 
 		template<typename ...Args>
-		void info(const std::string& msg, Args ...parameters) {
-			print(msg, 0, 0,std::forward<Args>(parameters)...);
-		}
+		void info(const std::string& msg, Args ...parameters) { print(msg, 0, 0,std::forward<Args>(parameters)...); }
 
 		template<typename ...Args>
-		void error(const std::string& msg, Args ...parameters) {
-			print(msg, 1, 1, std::forward<Args>(parameters)...);
-		}
+		void info(const char* msg, Args ...parameters) { print(msg, 0, 0, std::forward<Args>(parameters)...); }
 
 		template<typename ...Args>
-		void trace(const std::string& msg, Args ...parameters) {
-			print(msg, 3, 2, std::forward<Args>(parameters)...);
-		}
+		void error(const std::string& msg, Args ...parameters) { print(msg, 1, 1, std::forward<Args>(parameters)...); }
 
 		template<typename ...Args>
-		void warn(const std::string& msg, Args ...parameters) {
-			print(msg, 2, 3, std::forward<Args>(parameters)...);
-		}
+		void error(const char* msg, Args ...parameters) { print(msg, 1, 1, std::forward<Args>(parameters)...); }
+
+		template<typename ...Args>
+		void trace(const std::string& msg, Args ...parameters) { print(msg, 3, 2, std::forward<Args>(parameters)...); }
+
+		template<typename ...Args>
+		void trace(const char* msg, Args ...parameters) { print(msg, 3, 2, std::forward<Args>(parameters)...); }
+
+		template<typename ...Args>
+		void warn(const std::string& msg, Args ...parameters) { print(msg, 2, 3, std::forward<Args>(parameters)...); }
+
+		template<typename ...Args>
+		void warn(const char* msg, Args ...parameters) { print(msg, 2, 3, std::forward<Args>(parameters)...); }
 
 		template<typename ...Args>
 		void print(const std::string& msg, uint32_t prefix, uint32_t color, Args ...parameters) {

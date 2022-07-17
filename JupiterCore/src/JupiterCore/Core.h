@@ -21,11 +21,13 @@
 #endif // JPT_PLATFORM_WINDOWS
 
 #ifdef JPT_ENABLE_ASSERTS
-
 #define JPT_ASSERT(x, ...) if(!x) { JPT_ERROR(__VA_ARGS__); __debugbreak(); }
 #define JPT_ASSERT_FAIL(...) { JPT_ERROR(__VA_ARGS__); __debugbreak(); } 
+#else
+#define JPT_ASSERT(x, ...)
+#define JPT_ASSERT_FAIL(...)
+#endif // JPT_ENABLE_ASSERTS
 
-#endif
 
 namespace Jupiter::Core {
 
@@ -41,7 +43,17 @@ namespace Jupiter::Core {
 	}
 }
 
+#ifdef JPT_CORE_ENABLE_LOGGER
 #define JPT_CORE_INFO(msg, ...) Jupiter::Core::n_CoreLogger->info(msg, __VA_ARGS__)
 #define JPT_CORE_ERROR(msg, ...) Jupiter::Core::n_CoreLogger->error(msg, __VA_ARGS__)
 #define JPT_CORE_TRACE(msg, ...) Jupiter::Core::n_CoreLogger->trace(msg, __VA_ARGS__)
 #define JPT_CORE_WARN(msg, ...) Jupiter::Core::n_CoreLogger->warn(msg, __VA_ARGS__)
+#else
+#define JPT_CORE_INFO(msg, ...)
+#define JPT_CORE_ERROR(msg, ...)
+#define JPT_CORE_TRACE(msg, ...)
+#define JPT_CORE_WARN(msg, ...)
+#endif// JPT_CORE_ENABLE_LOGGER
+
+
+

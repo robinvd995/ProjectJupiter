@@ -6,15 +6,12 @@
 #include "Properties.h"
 #include "FileTypes.h"
 
-//#include "FileTypes.hpp"
-
 #define JPT_IO_ASSET_ID_MAX_LENGTH 64
 #define JPT_IO_ASSET_SOURCE_MAX_LENGTH 128
 
 namespace Jupiter::Io {
 
-	enum class IoOutputStructure
-	{
+	enum class IoOutputStructure {
 		UNDEFINED = 0,		// 0, err 
 		INDIVIDUAL = 1,		// all resources have its own output file
 		CONTAINER = 2,		// all resources are put into a single container
