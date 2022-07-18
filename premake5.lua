@@ -10,6 +10,18 @@ function linkAssimp()
     links "zlibstaticd"
 end
 
+function linkGoogleTest()
+    filter "configurations:Test"
+    links "gtest"
+    filter {}
+end
+
+function includeGoogleTest()
+    filter "configurations:Test"
+    includedirs "external/googletest/googletest/include"
+    filter {}
+end
+
 function includeAssimp()
     includedirs "external/assimp/include"
 end
@@ -36,6 +48,17 @@ function defaultFiles()
         "%{prj.name}/src/**.hpp",
         "%{prj.name}/src/**.cpp"
     }
+    filter "configurations:Debug"
+        files "%{prj.name}/src/**.cxx"
+
+    filter "configurations:Release"
+        files "%{prj.name}/src/**.cxx"
+
+    filter "configurations:Test"
+        files "%{prj.name}/test/**.cpp"
+        files "%{prj.name}/test/**.cxx"
+
+    filter {}
 end
 
 function defaultFilters()
@@ -44,6 +67,11 @@ function defaultFilters()
         systemversion "latest"
 
         defines{"JPT_PLATFORM_WINDOWS"}
+
+    filter "configurations:Test"
+        defines {"JPT_DEBUG", "JPT_TEST"}
+        runtime "Debug"
+        symbols "on"
 
     filter "configurations:Debug"
         defines "JPT_DEBUG"
@@ -59,9 +87,10 @@ function defaultFilters()
 end
 
 function defaultIncludes()
-    includedirs {
-        "%{prj.name}/src"
-    }
+    includedirs "%{prj.name}/src"
+    filter "configurations:Debug"
+        includedirs "%{prj.name}/test"
+    filter {}
 end
 
 function defaultDefines()
@@ -88,7 +117,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 workspace "Project Jupiter"
 filename "jupiter"
 architecture "x64"
-configurations { "Debug", "Release" }
+configurations { "Debug", "Release", "Test" }
 
 
 -- setup dependencies --

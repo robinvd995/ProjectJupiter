@@ -21,7 +21,9 @@ function createProjectIo()
 
     includeRapidXml()
     includeAssimp()
+    includeGoogleTest()
 
     linkAssimp()
+    linkGoogleTest()
 
 end

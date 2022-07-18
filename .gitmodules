@@ -4,3 +4,6 @@
 [submodule "external/rapidxml"]
 	path = external/rapidxml
 	url = https://github.com/robinvd995/rapidxml
+[submodule "external/googletest"]
+	path = external/googletest
+	url = https://github.com/robinvd995/googletest
