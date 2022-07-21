@@ -6,10 +6,9 @@
 
 #include "JupiterCore/DataBuffers.hpp"
 
-#define JPT_IO_PROPERTY_GROUPS_SIZE 3				// TODO
-#define JPT_IO_PROPERTY_IDENTIFIERS_SIZE 6			// TODO
-#define JPT_IO_PROPERTY_VALUES_SIZE 12				// TODO
-#define JPT_IO_PROPERTY_CONTAINER_SIZE 4			// TODO
+#include "Core.h"
+
+#include "PropertyDefinitions.h"
 
 namespace Jupiter::Io {
 
@@ -17,7 +16,7 @@ namespace Jupiter::Io {
 	typedef std::tuple<uint32_t, uint32_t, uint32_t> GroupIndex;
 	// [0] = property_id; [1] = index of property local to group; [2] = size of property
 	typedef std::tuple<uint32_t, uint32_t, uint32_t> PropertyIndex;
-
+	// Typedef for the entries of the property index map
 	typedef std::pair<GroupIndex, std::vector<PropertyIndex>> PropertyIndexMapEntry;
 
 	// ---- BUFFERS -----
@@ -34,10 +33,13 @@ namespace Jupiter::Io {
 		BufferPropertyTemplate(const std::initializer_list<T*>& values) : m_Buffer(values) {}
 		~BufferPropertyTemplate() {}
 
+		const std::vector<T*>& getBuffer() const { return m_Buffer; }
+
 	private:
 		std::vector<T*> m_Buffer;
 
 		friend class PropertyManager;
+		JPT_IO_TEST_CLASS(PropertiesTestAdapter)
 	};
 
 	class PropertyBufferIndexMap {
@@ -53,6 +55,7 @@ namespace Jupiter::Io {
 
 		friend class PropertyManager;
 		friend class PropertyBuffer;
+		JPT_IO_TEST_CLASS(PropertiesTestAdapter)
 	};
 
 	/*
@@ -62,8 +65,8 @@ namespace Jupiter::Io {
 
 	public:
 		PropertyBuffer() = delete;
-		PropertyBuffer(PropertyBufferIndexMap* index_map);
 		PropertyBuffer(const PropertyBuffer&) = delete;
+		PropertyBuffer(PropertyBufferIndexMap* index_map);
 		~PropertyBuffer();
 
 		void setPropertyDefaultValue(uint32_t group_id, uint32_t property_id);
@@ -78,6 +81,7 @@ namespace Jupiter::Io {
 		PropertyBufferIndexMap* m_IndexMap = nullptr;
 
 		friend class PropertyManager;
+		JPT_IO_TEST_CLASS(PropertiesTestAdapter)
 	};
 
 	// ----- TEMPLATES -----
@@ -98,6 +102,7 @@ namespace Jupiter::Io {
 		const std::string m_PropertyValueName;
 
 		friend class PropertyManager;
+		JPT_IO_TEST_CLASS(PropertiesTestAdapter)
 	};
 
 	/*
@@ -111,6 +116,9 @@ namespace Jupiter::Io {
 		PropertyTemplate(uint32_t id, const std::string& name, BufferPropertyTemplate<PropertyValueTemplate>& accepted_values);
 		~PropertyTemplate();
 
+		const uint32_t getPropertyTemplateId() const;
+		const std::string& getPropertyName() const;
+
 	private:
 		const uint32_t m_PropertyId;
 		const std::string m_PropertyName;
@@ -118,6 +126,7 @@ namespace Jupiter::Io {
 		uint32_t m_PropertyBufferSize;
 
 		friend class PropertyManager;
+		JPT_IO_TEST_CLASS(PropertiesTestAdapter)
 	};
 
 	/*
@@ -131,6 +140,10 @@ namespace Jupiter::Io {
 		PropertyGroupTemplate(uint32_t id, const std::string& name, BufferPropertyTemplate<PropertyTemplate>& accepted_values);
 		~PropertyGroupTemplate();
 
+		const uint32_t getPropertyGroupTemplateId() const;
+		const std::string& getPropertyGroupTemplateName() const;
+		const std::vector<PropertyTemplate*>& getPropertyTemplates() const;
+
 	private:
 		const uint32_t m_PropertyGroupTemplateId;
 		const std::string m_PropertyGroupTemplateName;
@@ -140,27 +153,9 @@ namespace Jupiter::Io {
 		uint32_t m_PropertyGroupBufferSize = 0;
 
 		friend class PropertyManager;
+		JPT_IO_TEST_CLASS(PropertiesTestAdapter)
 	};
 
-	/*
-		// TODO
-	*/
-	/*struct PropertyContainerTemplate {
-
-	public:
-		PropertyContainerTemplate() = delete;
-		PropertyContainerTemplate(const PropertyContainerTemplate&) = delete;
-		PropertyContainerTemplate(uint32_t file_type_id, uint32_t usage, BufferPropertyTemplate<PropertyGroupTemplate>& groups);
-		~PropertyContainerTemplate();
-
-	private:
-		const uint32_t m_PropertyContainerTemplateId;
-		const uint32_t m_FileUsage;
-		BufferPropertyTemplate<PropertyGroupTemplate>& m_Groups;
-
-		friend class PropertyManager;
-	};*/
-	
 	// ----- MANAGER -----
 
 	/*
@@ -175,20 +170,25 @@ namespace Jupiter::Io {
 		static PropertyTemplate* addPropertyTemplate(uint32_t id, const std::string& name, BufferPropertyTemplate<PropertyValueTemplate> accepted_values);
 		//TODO
 		static PropertyGroupTemplate* addPropertyGroupTemplate(uint32_t id, const std::string& name, BufferPropertyTemplate<PropertyTemplate> values);
+				
 		//TODO
-		//static PropertyContainerTemplate* addPropertyContainerTemplate(uint32_t file_type_id, uint32_t usage, BufferPropertyTemplate<PropertyGroupTemplate> group);
-		
-		//TODO
-		static PropertyBufferIndexMap* createPropertyBufferIndexMap(std::initializer_list<uint32_t> group_ids);
+		static PropertyBufferIndexMap* createPropertyBufferIndexMap(const std::vector<PropertyGroupTemplate*>& groups);
 		//TODO
 		static PropertyBuffer* createPropertyBuffer(PropertyBufferIndexMap* index_map);
+		//TODO
+		static void deletePropertyBuffer(PropertyBuffer* buffer);
 
 		//TODO
 		static uint32_t getDefaultValueForProperty(uint32_t property_id);
+		//TODO
+		static uint32_t getDefaultValueForProperty(PropertyTemplate* property_template);
+		//TODO
+		static uint32_t getValueForPropertyAndValue(PropertyTemplate* property_template, const std::string& value);
 
 	private:
 		inline static PropertyManager* s_Instance = nullptr;
 		friend class ProjectIo;
+		JPT_IO_TEST_CLASS(PropertiesTestAdapter)
 
 	private:
 		PropertyManager();
@@ -197,9 +197,8 @@ namespace Jupiter::Io {
 		PropertyManager& operator=(const PropertyManager&) = delete;
 
 	private:
-		PropertyGroupTemplate* m_GroupTemplates[JPT_IO_PROPERTY_GROUPS_SIZE] = {};
-		PropertyTemplate* m_PropertyTemplates[JPT_IO_PROPERTY_IDENTIFIERS_SIZE] = {};
-		PropertyValueTemplate* m_ValueTemplates[JPT_IO_PROPERTY_VALUES_SIZE] = {};
-		//PropertyContainerTemplate* m_ContainerTemplates[JPT_IO_PROPERTY_CONTAINER_SIZE] = {};
+		PropertyGroupTemplate* m_GroupTemplates[ENUM_PROPERTY_GROUPS_COUNT] = {};
+		PropertyTemplate* m_PropertyTemplates[ENUM_PROPERTY_IDENTIFIERS_COUNT] = {};
+		PropertyValueTemplate* m_ValueTemplates[ENUM_PROPERTY_VALUES_COUNT] = {};
 	};
 }

@@ -3,19 +3,20 @@
 #include <string>
 #include <vector>
 
-#define JPT_IO_FILE_TYPE_COUNT 5
+#include "FileDefinitions.h"
 
 namespace Jupiter::Io {
 
 	class FileType {
 
 	public:
-		FileType(const uint32_t file_type_id, const uint32_t file_usage, const std::initializer_list<std::string>& aliases);
+		FileType(const uint32_t file_type_id, const std::initializer_list<std::string>& aliases);
 		~FileType();
+
+		const uint32_t getFileTypeId() const;
 
 	private:
 		const uint32_t m_FileTypeId;
-		const uint32_t m_UsageFlags = 0;
 		const std::vector<std::string> m_Aliases;
 
 		friend class FileTypeManager;
@@ -28,7 +29,7 @@ namespace Jupiter::Io {
 		FileTypeManager();
 		~FileTypeManager();
 
-		static FileType* addFileType(uint32_t file_type_id, uint32_t file_usage, const std::initializer_list<std::string>& aliases);
+		static FileType* addFileType(uint32_t file_type_id, const std::initializer_list<std::string>& aliases);
 
 		static FileType* getFileTypeFromAlias(const std::string& alias);
 		static FileType* getFileTypeForId(uint32_t file_type_id);
@@ -38,8 +39,7 @@ namespace Jupiter::Io {
 		friend class ProjectIo;
 
 	private:
-		FileType* m_FileTypes[JPT_IO_FILE_TYPE_COUNT] = {};
+		FileType* m_FileTypes[ENUM_FILE_TYPE_COUNT] = {};
 	};
 
 }
-

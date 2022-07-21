@@ -10,8 +10,12 @@
 
 #include "Core.h"
 #include "DataTransformer.hpp"
+
 #include "Properties.h"
 #include "FileTypes.h"
+#include "Assets.h"
+
+#include "JptMemory.h"
 
 namespace Jupiter::Io {
 
@@ -26,144 +30,113 @@ namespace Jupiter::Io {
 
 	}
 
-	//inline static void ioAssetError(std::string id, std::string errortype, std::string errormessage) {
-		//JPT_IO_ERROR("The following error occurred " + errortype + " for asset with id '" + id + "'\n    " + errormessage);
-	//	JPT_IO_ERROR("The following error occured [0] for asset with id '[1]'\n    [2]", id, errortype, errormessage);
-	//}
-
 	void ProjectIo::run() {
 		// Initialize logger
 		Jupiter::Io::initializeIoLogger(JPT_LOGGER_FLAG_PREFIX | JPT_LOGGER_FLAG_COLOR | JPT_LOGGER_FLAG_TIMESTAMP | 
 			JPT_LOGGER_FLAG_NAME);
 
+		MemoryManager::s_Instance = new MemoryManager();
+
+		bool cfgExists = std::filesystem::exists(m_ConfigFilePath);
+		if (!cfgExists) return;
+		Xml::XmlDocument doc = Xml::parseXmlFile(m_ConfigFilePath, JPT_IO_CONFIG_ROOT_NODE);
+
 		// Initialize Managers
-		//AssetPropertyManager::s_Instance = new AssetPropertyManager();
 		FileTypeManager::s_Instance = new FileTypeManager();
-		DataTransformManager::s_Instance = new DataTransformManager();
 		PropertyManager::s_Instance = new PropertyManager();
+		AssetManager::s_Instance = new AssetManager();
 
 		// Run the init function given to this object during its creation
 		m_InitFunction();
 
 		std::string error;
-		if (!load(error)) { std::cout << error << std::endl; return; }
-		if (!execute(error)) { std::cout << error << std::endl; return; }
+		if (!load(error, doc)) { std::cout << error << std::endl; return; }
+		if (!execute(error, doc)) { std::cout << error << std::endl; return; }
 		if (!release(error)) { std::cout << error << std::endl; return; }
 
 		// Delete Managers
-		//delete AssetPropertyManager::s_Instance;
 		delete FileTypeManager::s_Instance;
-		delete DataTransformManager::s_Instance;
 		delete PropertyManager::s_Instance;
+		delete AssetManager::s_Instance;
+
+		delete MemoryManager::s_Instance;
 
 		// Delete Logger
 		Jupiter::Io::deleteIoLogger();
 	}
 
-	bool ProjectIo::load(std::string& error) {
+	bool ProjectIo::load(std::string& error, Xml::XmlDocument& doc) {
 		JPT_IO_INFO("Loading config file: [0]", m_ConfigFilePath);
 
-		bool cfgExists = std::filesystem::exists(m_ConfigFilePath);
-		if (!cfgExists) { error = "Can't find config file with name " + m_ConfigFilePath + "'!"; return false; }
-
-		// Parse the document and get the root node
-		Xml::XmlDocument doc = Xml::parseXmlFile(m_ConfigFilePath, "io_configuration");
 		const Xml::XmlNode root = doc.getRootNode();
 
 		// Parse settings node
-		const Xml::XmlNode nodeSettings = root.getFirstChild("settings");
+		const Xml::XmlNode nodeSettings = root.getFirstChild(JPT_IO_CONFIG_SETTINGS_NODE);
+		const Xml::XmlNode nodeOutput = nodeSettings.getFirstChild(JPT_IO_CONFIG_OUTPUT_NODE);
+		m_Config.m_OututStructure = (IoOutputStructure)nodeOutput.getAttributeAsInt(JPT_IO_CONFIG_OUTPUT_STRUCTURE_ATTRIB);
 
 		// Parse assets node
-		const Xml::XmlNode nodeAssets = root.getFirstChild("included_assets");
-		m_Config.m_Assets.m_Amount = nodeAssets.getAttributeAsInt("count");
-
-		// Reserver the size of the asset buffer
-		m_Config.m_Assets.m_AssetBuffer.reserve(m_Config.m_Assets.m_Amount);
-		std::vector<IoAsset>& assetBuffer = m_Config.m_Assets.m_AssetBuffer;
-
-		nodeAssets.iterate("asset", [&assetBuffer](const Xml::XmlNode& node) -> bool {
-
-			// parse asset id and source
-			std::string id = node.getAttribute("id").c_str();
-			std::string src = node.getAttribute("src").c_str();
-
-			// parse asset file input type
-			std::string inputtype = node.getAttribute("inputtype");
-			FileType* fit = FileTypeManager::getFileTypeFromAlias(inputtype);
-			if (!fit) {
-				JPT_IO_ERROR("An error occurred while loading an asset config with id '[0]'\n    \
-					Input type with name '[1]' is not registered!", id, inputtype); 
-				return false;
-			}
-
-			// parse asset file output type
-			std::string outputtype = node.getAttribute("outputtype");
-			FileType* fot = FileTypeManager::getFileTypeFromAlias(outputtype);
-			if (!fot) {
-				JPT_IO_ERROR("An error occurred while loading an asset config with id '[0]'\n    \
-					Output type with name '[1]' is not registered!", id, outputtype); 
-				return false;
-			}
-
-			// create the asset object
-			IoAsset asset;
-			asset.m_InputType = fit;
-			asset.m_OutputType = fot;
-			asset.m_IdSize = (uint32_t)id.length();
-			asset.m_SourceSize = (uint32_t)src.length();
-
-#ifndef JPT_IO_CHECK_SIZE_ARRAYS
-			if (asset.m_IdSize > JPT_IO_ASSET_ID_MAX_LENGTH) { 
-				JPT_IO_ERROR("An error occurred while loading an asset config with id '[0]'\n    Asset id size exceeds the maximum size!", id);
-				return false;
-			}
-			if (asset.m_SourceSize > JPT_IO_ASSET_SOURCE_MAX_LENGTH) { 
-				JPT_IO_ERROR("An error occurred while loading an asset config with id '[0]'\n    Asset src size exceeds the maximum size!", id);
-				return false;
-			}
-#endif // JPT_IO_CHECK_SIZE_ARRAYS
-
-			// copy the id and src into their containers
-			memcpy(&asset.m_Id, id.c_str(), asset.m_IdSize);
-			memcpy(&asset.m_Source, src.c_str(), asset.m_SourceSize);
-
-			// push the asset into the buffer
-			JPT_IO_INFO("Loaded asset: id='[0]', src='[1]', inputtype='[2]', outputtype='[3]'", id, src, fit->m_FileTypeId, fot->m_FileTypeId);
-			assetBuffer.push_back(asset);
-
-			//Properties
-			bool hasTextureProperties = node.hasChildNode("texture_properties");
-			//if (!hasTextureProperties) ioAssetError(id, "TEST", "no texture properties node");
-			//const Xml::XmlNode texPropsNode = node.getFirstChild("texture_properties");
-
-
-			return true;
-		});
+		const Xml::XmlNode nodeAssets = root.getFirstChild(JPT_IO_CONFIG_INCLUDED_ASSETS);
+		m_Config.m_IncludedAssetCount = nodeAssets.getAttributeAsInt(JPT_IO_CONFIG_GENERAL_ATTRIB_COUNT);
 
 		return true;
 	}
 
-	bool ProjectIo::execute(std::string& error) {
-		for (IoAsset& asset : m_Config.m_Assets.m_AssetBuffer) {
-			std::string assetId = std::string(asset.m_Id, asset.m_Id + asset.m_IdSize);
-			std::string assetSrc = std::string(asset.m_Source, asset.m_Source + asset.m_SourceSize);
-			FileType* inType = asset.m_InputType;
-			FileType* outType = asset.m_OutputType;
+	bool ProjectIo::execute(std::string& error, Xml::XmlDocument& doc) {
+		const Xml::XmlNode root = doc.getRootNode();
+		const Xml::XmlNode nodeAssets = root.getFirstChild("included_assets");
 
-			//DataTransformFunction transformFunction = DataTransformManager::getTransformFunction(inType, outType);
+		nodeAssets.iterate("asset", [](const Xml::XmlNode& node) -> bool {
+			// parse asset id and source
+			std::string id = node.getAttribute(JPT_IO_CONFIG_ASSET_ATTRIB_ID).c_str();
+			std::string src = node.getAttribute(JPT_IO_CONFIG_ASSET_ATTRIB_SRC).c_str();
 
-			//if (transformFunction == nullptr) {
-				//std::string sInType = FileTypeManager::getInputStringFromId(inType);
-				//std::string sOutType = FileTypeManager::getOutputStringFromId(outType);
-				//ioAssetError(assetId, "UNKNOWN_TRANSFORMATION", "There is no transformer found for '" + sInType + "' to '" + sOutType + "'");
-				//continue;
-			//}
+			// parse asset file src type
+			std::string strSrcType = node.getAttribute(JPT_IO_CONFIG_ASSET_ATTRIB_SRC_TYPE);
+			FileType* srcType = FileTypeManager::getFileTypeFromAlias(strSrcType);
+			if (!srcType) {
+				JPT_IO_ERROR("An error occurred while loading an asset config with id '[0]'\n    Source type with name '[1]' is not registered!", id, strSrcType);
+				return false;
+			}
 
-			//transformFunction({});
+			// parse asset file output type
+			std::string strAssetType = node.getAttribute(JPT_IO_CONFIG_ASSET_ATTRIB_TYPE);
+			AssetTemplate* assetTemplate = AssetManager::getAssetTemplateFromAlias(strAssetType);
+			if (!assetTemplate) {
+				JPT_IO_ERROR("An error occurred while loading an asset config with id '[0]'\n    Asset type with name '[1]' is not registered!", id, strAssetType);
+				return false;
+			}
 
-			bool srcExists = std::filesystem::exists(std::string(asset.m_Source));
-			//if (!srcExists) { ioAssetError(assetId, "MISSING_FILE", "Cannot find source file '" + assetSrc + "'"); continue; }
-		}
+			JPT_IO_INFO("Asset found: id=[0], src=[1], src_type=[2], asset_type=[3]", id, src, strSrcType, strAssetType);
+
+			if (!assetTemplate->isCompatibleWithSrcFileType(srcType)) {
+				JPT_IO_ERROR("An error occurred while loading an asset with id '[0]'\n    Asset type '[1]' is not compatible with src file of type '[2]'",
+					id, strAssetType, strSrcType);
+				return false;
+			}
+
+			PropertyBuffer* propBuffer = nullptr;
+			if (assetTemplate->hasProperties()) {
+				propBuffer = PropertyManager::createPropertyBuffer(assetTemplate->getPropertyBufferIndexMap());
+				for (PropertyGroupTemplate* pgt : assetTemplate->getAssetPropertyGroups()) {
+					Xml::XmlNode propNode = node.getFirstChild(pgt->getPropertyGroupTemplateName().c_str());
+					for (PropertyTemplate* pt : pgt->getPropertyTemplates()) {
+						const std::string propAttribValue = propNode.getAttribute(pt->getPropertyName().c_str());
+						uint32_t propertyValue = PropertyManager::getValueForPropertyAndValue(pt, propAttribValue);
+						propBuffer->setPropertyValue(pgt->getPropertyGroupTemplateId(), pt->getPropertyTemplateId(), propertyValue);
+					}
+				}
+			}
+
+//			if (propBuffer) {
+//				JPT_IO_INFO("min_filter=[0]", propBuffer->getPropertyValue(PG_GROUP_TEXTURE, PI_TEXTURE_MIN_FILTER));
+//				JPT_IO_INFO("mag_filter=[0]", propBuffer->getPropertyValue(PG_GROUP_TEXTURE, PI_TEXTURE_MAG_FILTER));
+//				JPT_IO_INFO("wrap_s=[0]", propBuffer->getPropertyValue(PG_GROUP_TEXTURE, PI_TEXTURE_WRAP_S));
+//				JPT_IO_INFO("wrap_t=[0]", propBuffer->getPropertyValue(PG_GROUP_TEXTURE, PI_TEXTURE_WRAP_T));
+//				JPT_IO_INFO("wrap_r=[0]", propBuffer->getPropertyValue(PG_GROUP_TEXTURE, PI_TEXTURE_WRAP_R));
+//			}
+
+		});
 		return true;
 	}
 

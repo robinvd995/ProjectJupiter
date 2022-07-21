@@ -8,17 +8,13 @@
 
 namespace Jupiter::Io {
 
-	enum EnumFileUsage {
-		FILE_USAGE_INPUT = 0,
-		FILE_USAGE_OUTPUT = 1
-	};
-
 	enum EnumFileType {
 		FILE_TYPE_UNDEFINED = 0,
 		FILE_TYPE_PNG = 1,
 		FILE_TYPE_COLLADA = 2,
-		FILE_TYPE_TEX_RGBA = 3,
-		FILE_TYPE_MODEL_STATIC = 4
+
+
+		ENUM_FILE_TYPE_COUNT
 	};
 
 }

@@ -4,9 +4,8 @@ namespace Jupiter::Io {
 
 	// ----- START FileType -----
 
-	FileType::FileType(const uint32_t file_type_id, const uint32_t file_usage, const std::initializer_list<std::string>& aliases) :
+	FileType::FileType(const uint32_t file_type_id, const std::initializer_list<std::string>& aliases) :
 		m_FileTypeId(file_type_id),
-		m_UsageFlags(file_usage),
 		m_Aliases(aliases)
 	{
 
@@ -14,6 +13,10 @@ namespace Jupiter::Io {
 
 	FileType::~FileType() {
 
+	}
+
+	const uint32_t FileType::getFileTypeId() const {
+		return m_FileTypeId;
 	}
 
 	// -----  END  FileType -----
@@ -26,22 +29,22 @@ namespace Jupiter::Io {
 	}
 
 	FileTypeManager::~FileTypeManager() {
-		for (int i = 0; i < JPT_IO_FILE_TYPE_COUNT; i++) {
+		for (int i = 0; i < ENUM_FILE_TYPE_COUNT; i++) {
 			FileType* ft = s_Instance->m_FileTypes[i];
 			if (!ft) continue;
 			delete ft;
 		}
 	}
 
-	FileType* FileTypeManager::addFileType(uint32_t file_type_id, uint32_t file_usage, const std::initializer_list<std::string>& aliases) {
+	FileType* FileTypeManager::addFileType(uint32_t file_type_id, const std::initializer_list<std::string>& aliases) {
 		if (s_Instance->m_FileTypes[file_type_id]) return s_Instance->m_FileTypes[file_type_id];
-		FileType* fileType = new FileType(file_type_id, file_usage, aliases);
+		FileType* fileType = new FileType(file_type_id, aliases);
 		s_Instance->m_FileTypes[file_type_id] = fileType;
 		return fileType;
 	}
 
 	FileType* FileTypeManager::getFileTypeFromAlias(const std::string& alias) {
-		for (int i = 0; i < JPT_IO_FILE_TYPE_COUNT; i++) {
+		for (int i = 0; i < ENUM_FILE_TYPE_COUNT; i++) {
 			FileType* ft = s_Instance->m_FileTypes[i];
 			if (!ft) continue;
 			for (const std::string& ftAlias : ft->m_Aliases)

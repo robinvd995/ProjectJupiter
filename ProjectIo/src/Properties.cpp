@@ -1,6 +1,7 @@
 #include "Properties.h"
 
 #include "FileTypes.h"
+#include "JptMemory.h"
 
 #include <set>
 
@@ -28,6 +29,14 @@ namespace Jupiter::Io {
 
 	PropertyTemplate::~PropertyTemplate() {}
 
+	const uint32_t PropertyTemplate::getPropertyTemplateId() const {
+		return m_PropertyId;
+	}
+
+	const std::string& PropertyTemplate::getPropertyName() const {
+		return m_PropertyName;
+	}
+
 	// -----  END  PropertyTemplate -----
 
 	// ----- START PropertyGroupTemplate -----
@@ -40,6 +49,18 @@ namespace Jupiter::Io {
 	{}
 
 	PropertyGroupTemplate::~PropertyGroupTemplate() {}
+
+	const uint32_t PropertyGroupTemplate::getPropertyGroupTemplateId() const {
+		return m_PropertyGroupTemplateId;
+	}
+
+	const std::string& PropertyGroupTemplate::getPropertyGroupTemplateName() const {
+		return m_PropertyGroupTemplateName;
+	}
+
+	const std::vector<PropertyTemplate*>& PropertyGroupTemplate::getPropertyTemplates() const {
+		return m_Properties.getBuffer();
+	}
 
 	// ----  END  PropertyGroupTemplate -----
 
@@ -116,25 +137,37 @@ namespace Jupiter::Io {
 
 	PropertyManager::PropertyManager() {}
 
-	PropertyManager::~PropertyManager() {}
+	PropertyManager::~PropertyManager() {
+		for (PropertyGroupTemplate* pgt : m_GroupTemplates) {
+			if (pgt) delete pgt;
+		}
+
+		for (PropertyTemplate* pt : m_PropertyTemplates) {
+			if (pt) delete pt;
+		}
+
+		for (PropertyValueTemplate* pvt : m_ValueTemplates) {
+			if (pvt) delete pvt;
+		}
+	}
 
 	PropertyValueTemplate* PropertyManager::addPropertyValueTemplate(uint32_t id, const std::string& name) {
 		if (s_Instance->m_ValueTemplates[id]) return s_Instance->m_ValueTemplates[id];
-		PropertyValueTemplate* valueTemplate = new PropertyValueTemplate(id, name);
+		PropertyValueTemplate* valueTemplate = createPtr<PropertyValueTemplate>(id, name);
 		s_Instance->m_ValueTemplates[id] = valueTemplate;
 		return valueTemplate;
 	}
 
 	PropertyTemplate* PropertyManager::addPropertyTemplate(uint32_t id, const std::string& name, BufferPropertyTemplate<PropertyValueTemplate> accepted_values) {
 		if (s_Instance->m_PropertyTemplates[id]) return s_Instance->m_PropertyTemplates[id];
-		PropertyTemplate* propertyTemplate = new PropertyTemplate(id, name, accepted_values);
+		PropertyTemplate* propertyTemplate = createPtr<PropertyTemplate>(id, name, accepted_values);
 		s_Instance->m_PropertyTemplates[id] = propertyTemplate;
 		return propertyTemplate;
 	}
 
 	PropertyGroupTemplate* PropertyManager::addPropertyGroupTemplate(uint32_t id, const std::string& name, BufferPropertyTemplate<PropertyTemplate> values) {
 		if (s_Instance->m_GroupTemplates[id]) return s_Instance->m_GroupTemplates[id];
-		PropertyGroupTemplate* groupTemplate = new PropertyGroupTemplate(id, name, values);
+		PropertyGroupTemplate* groupTemplate = createPtr<PropertyGroupTemplate>(id, name, values);
 
 		uint32_t curIndex = 0;
 		for (PropertyTemplate* val : values.m_Buffer) {
@@ -155,14 +188,15 @@ namespace Jupiter::Io {
 	//	return containerTemplate;
 	//}
 
-	PropertyBufferIndexMap* PropertyManager::createPropertyBufferIndexMap(std::initializer_list<uint32_t> group_ids) {
-		std::set<uint32_t> groupids(group_ids.begin(), group_ids.end());
-		PropertyBufferIndexMap* indexMap = new PropertyBufferIndexMap();
+	PropertyBufferIndexMap* PropertyManager::createPropertyBufferIndexMap(const std::vector<PropertyGroupTemplate*>& groups) {
+		//std::set<uint32_t> groupids(group_ids.begin(), group_ids.end());
+		PropertyBufferIndexMap* indexMap = createPtr<PropertyBufferIndexMap>();
 
-		for (uint32_t id : groupids) {
-			PropertyGroupTemplate* groupTemplate = s_Instance->m_GroupTemplates[id];
+		//for (uint32_t id : groupids) {
+		for(PropertyGroupTemplate* groupTemplate : groups) {
+			// PropertyGroupTemplate* groupTemplate = s_Instance->m_GroupTemplates[id];
 			if (!groupTemplate) continue;
-			GroupIndex groupIndex = { id, indexMap->m_BufferSize, groupTemplate->m_PropertyGroupBufferSize };
+			GroupIndex groupIndex = { groupTemplate->m_PropertyGroupTemplateId, indexMap->m_BufferSize, groupTemplate->m_PropertyGroupBufferSize };
 			
 			std::vector<PropertyIndex> propertyIndices;
 			uint32_t curPropertyIndex = 0;
@@ -182,12 +216,27 @@ namespace Jupiter::Io {
 		// propertyBuffer->m_Buffer = (char*)malloc(index_map->m_BufferSize);
 		// propertyBuffer->m_IndexMap = index_map;
 		// return propertyBuffer;
-		return new PropertyBuffer(index_map);
+		return createPtr<PropertyBuffer>(index_map);
+	}
+
+	void PropertyManager::deletePropertyBuffer(PropertyBuffer* buffer) {
+		deletePtr<PropertyBuffer>(buffer);
 	}
 
 	uint32_t PropertyManager::getDefaultValueForProperty(uint32_t property_id) {
 		PropertyTemplate* propTemplate = s_Instance->m_PropertyTemplates[property_id];
 		return propTemplate->m_AcceptedValues.m_Buffer[0]->m_PropertyValueId;
+	}
+
+	uint32_t PropertyManager::getDefaultValueForProperty(PropertyTemplate* property_template) {
+		return property_template->m_AcceptedValues.m_Buffer[0]->m_PropertyValueId;
+	}
+
+	uint32_t PropertyManager::getValueForPropertyAndValue(PropertyTemplate* property_template, const std::string& value) {
+		for (PropertyValueTemplate* pvt : property_template->m_AcceptedValues.m_Buffer) {
+			if (pvt->m_PropertyValueName == value) return pvt->m_PropertyValueId;
+		}
+		return getDefaultValueForProperty(property_template);
 	}
 
 	// -----  END  PropertyManager -----

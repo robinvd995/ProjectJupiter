@@ -2,14 +2,17 @@
 
 namespace Jupiter::Io {
 
-	enum AssetPropertyGroups {
+	enum EnumPropertyGroups {
 		PG_UNDEFINED = 0,
 
 		PG_GROUP_TEXTURE = 1,
-		PG_GROUP_MODEL = 2
+		PG_GROUP_MODEL = 2,
+
+
+		ENUM_PROPERTY_GROUPS_COUNT
 	};
 
-	enum AssetPropertyIdentifiers {
+	enum EnumPropertyIdentifiers {
 		PI_UNDEFINED = 0,
 
 		// ----- Texture ----- 
@@ -18,10 +21,17 @@ namespace Jupiter::Io {
 		PI_TEXTURE_WRAP_S = 3,
 		PI_TEXTURE_WRAP_T = 4,
 		PI_TEXTURE_WRAP_R = 5,
+
+
+		ENUM_PROPERTY_IDENTIFIERS_COUNT
 	};
 
-	enum AssetPropertyValues {
+	enum EnumPropertyValues {
 		PV_UNDEFINED = 0,
+
+		// ----- General -----
+		PV_FALSE = 12,
+		PV_TRUE = 13,
 
 		// ----- Texture -----
 		PV_TEXTURE_NEAREST = 1,
@@ -34,6 +44,8 @@ namespace Jupiter::Io {
 		PV_TEXTURE_CLAMP_TO_EDGE = 8,
 		PV_TEXTURE_CLAMP_TO_BORDER = 9,
 		PV_TEXTURE_MIRRORED_REPEAT = 10,
-		PV_TEXTURE_MIRRORED_CLAMP_TO_EDGE = 11
+		PV_TEXTURE_MIRRORED_CLAMP_TO_EDGE = 11,
+
+		ENUM_PROPERTY_VALUES_COUNT
 	};
 }

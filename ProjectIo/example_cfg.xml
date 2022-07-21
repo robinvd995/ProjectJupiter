@@ -1,13 +1,13 @@
 <io_configuration>
 	<id>DEBUG_EXAMPLE</id>
 	<settings>
-		<output structure="1"/> <!--structure=0 error, structure=1 individual files, structure=2 single file-->
+		<output structure="1"/>
 	</settings>
 	<included_assets count="2">
-		<asset id="texture.texRGBA" src="test.png" inputtype="png" outputtype="tex_rgba">
-			<texture_properties min_filter="TEXTURE_NEAREST" mag_filter="TEXTURE_NEAREST" wrap_s="TEXTURE_CLAMP_TO_EDGE" wrap_t="TEXTURE_CLAMP_TO_EDGE" wrap_r="TEXTURE_CLAMP_TO_EDGE"/>
+		<asset id="texture.texRGBA" src="test.png" src_file_type="png" asset_type="tex_rgba">
+			<texture_properties min_filter="nearest_mipmap_nearest" mag_filter="linear" wrap_s="clamp_to_edge" wrap_t="mirrored_repeat" wrap_r="repeat"/>
 		</asset>
-		<asset id="collada.model_static" src="test.dae" inputtype="collada" outputtype="model_static">
+		<asset id="collada.model_static" src="test.dae" src_file_type="collada" asset_type="model_static">
 			<collada_properties/>
 		</asset>
 	</included_assets>

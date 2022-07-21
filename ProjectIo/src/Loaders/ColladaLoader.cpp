@@ -109,5 +109,4 @@ namespace Jupiter::Io {
 			processNode(scene->mRootNode, scene, rootnode, model);
 		}
 	}
-
 }

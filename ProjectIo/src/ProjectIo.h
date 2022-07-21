@@ -21,13 +21,13 @@ namespace Jupiter::Io {
 		void run();
 
 	private:
-		bool load(std::string& error);
-		bool execute(std::string& error);
+		bool load(std::string& error, Xml::XmlDocument& doc);
+		bool execute(std::string& error, Xml::XmlDocument& doc);
 		bool release(std::string& error);
 
 	private:
 		std::string m_ConfigFilePath;
-		IoConfig m_Config;
+		ProjectIoConfig m_Config;
 		init_func m_InitFunction = nullptr;
 	};
 }
