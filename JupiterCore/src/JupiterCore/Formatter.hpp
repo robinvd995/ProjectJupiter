@@ -88,7 +88,9 @@ namespace Jupiter {
 		inline static std::string toString(unsigned int val) { return std::to_string(val); }
 		inline static std::string toString(unsigned long val) { return std::to_string(val); }
 		inline static std::string toString(const char* val) { return std::string(val); }
+		inline static std::string toString(const unsigned char* val) { return std::string((const char*)val); }
 		inline static std::string toString(std::string& val) { return val; }
 		inline static std::string toString(const std::string& val) { val; }
+		inline static std::string toString(bool val) { return val ? "true" : "false"; }
 	};
 }

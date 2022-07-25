@@ -1,7 +1,5 @@
 
 function createJupiterCore()
-    print("Generating Jupiter Core...")
-
     project "JupiterCore"
     location "JupiterCore"
     kind "StaticLib"

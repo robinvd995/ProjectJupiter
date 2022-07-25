@@ -1,7 +1,11 @@
 -- includes --
 include "scripts/premake/jupiter_core.lua"
+include "scripts/premake/jupiter_engine.lua"
+
 include "scripts/premake/project_io.lua"
 include "scripts/premake/project_europa.lua"
+
+include "scripts/premake/project_juno.lua"
 
 -- library function includes --
 
@@ -14,6 +18,14 @@ function linkGoogleTest()
     filter "configurations:Test"
     links "gtest"
     filter {}
+end
+
+function linkGlad()
+    links "Glad"
+end
+
+function linkGLFW()
+    links "GLFW"
 end
 
 function includeGoogleTest()
@@ -30,6 +42,14 @@ function includeRapidXml()
     includedirs "external/rapidxml"
 end
 
+function includeGlad()
+    includedirs "external/glad/include"
+end
+
+function includeGLFW()
+    includedirs "external/glfw/include"
+end
+
 -- basic functions --
 
 function defaultLibDirectories()
@@ -43,20 +63,25 @@ end
 
 function defaultFiles()
     files {
-        "%{prj.name}/src/**.c",
-        "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.hpp",
-        "%{prj.name}/src/**.cpp"
+        "%{prj.location}/src/**.c",
+        "%{prj.location}/src/**.h",
+        "%{prj.location}/src/**.hpp",
+        "%{prj.location}/src/**.cpp",
+
+        "%{prj.location}/include/**.c",
+        "%{prj.location}/include/**.h",
+        "%{prj.location}/include/**.hpp",
+        "%{prj.location}/include/**.cpp"
     }
     filter "configurations:Debug"
-        files "%{prj.name}/src/**.cxx"
+        files "%{prj.location}/src/**.cxx"
 
     filter "configurations:Release"
-        files "%{prj.name}/src/**.cxx"
+        files "%{prj.location}/src/**.cxx"
 
     filter "configurations:Test"
-        files "%{prj.name}/test/**.cpp"
-        files "%{prj.name}/test/**.cxx"
+        files "%{prj.location}/test/**.cpp"
+        files "%{prj.location}/test/**.cxx"
 
     filter {}
 end
@@ -88,7 +113,8 @@ end
 
 function defaultIncludes()
     includedirs "%{prj.name}/src"
-    filter "configurations:Debug"
+    includedirs "%{prj.name}/include/%{prj.name}"
+    filter "configurations:Test"
         includedirs "%{prj.name}/test"
     filter {}
 end
@@ -97,14 +123,6 @@ function defaultDefines()
     defines {
 
     }
-end
-
-function createExternalDependencies()
-    group "External_Dependencies"
-
-    --include "external/assimp"
-
-    group ""
 end
 
 -- variables --
@@ -119,12 +137,17 @@ filename "jupiter"
 architecture "x64"
 configurations { "Debug", "Release", "Test" }
 
-
--- setup dependencies --
---createExternalDependencies()
+-- create external projects --
+group "External"
+include "external/glad"
+include "external/glfw"
+group ""
 
 -- create projects --
 
-createProjectIo()
-createProjectEuropa()
 createJupiterCore()
+createJupiterEngine()
+
+createProjectIo()
+
+createProjectJuno()

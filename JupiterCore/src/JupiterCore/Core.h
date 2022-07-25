@@ -21,8 +21,8 @@
 #endif // JPT_PLATFORM_WINDOWS
 
 #ifdef JPT_ENABLE_ASSERTS
-#define JPT_ASSERT(x, ...) if(!x) { JPT_ERROR(__VA_ARGS__); __debugbreak(); }
-#define JPT_ASSERT_FAIL(...) { JPT_ERROR(__VA_ARGS__); __debugbreak(); } 
+#define JPT_ASSERT(x, ...) if(!x) { JPT_CORE_ERROR(__VA_ARGS__); __debugbreak(); }
+#define JPT_ASSERT_FAIL(...) { JPT_CORE_ERROR(__VA_ARGS__); __debugbreak(); } 
 #else
 #define JPT_ASSERT(x, ...)
 #define JPT_ASSERT_FAIL(...)

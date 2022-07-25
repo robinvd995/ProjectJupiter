@@ -1,10 +1,12 @@
 
-function createProjectIo()
-    project "ProjectIo"
-    location "ProjectIo"
+function createProjectJuno()
+
+    project "Sanbox_Juno"
+    location "Juno"
     kind "ConsoleApp"
     language "C++"
     cppdialect "C++17"
+    staticruntime "off"
 
     defaultOutDirectories()
     defaultLibDirectories()
@@ -13,15 +15,6 @@ function createProjectIo()
     defaultIncludes()
     defaultDefines()
 
-    defines {}
-    
     includeJupiterCore()
-
-    includeRapidXml()
-    includeAssimp()
-    includeGoogleTest()
-
-    linkAssimp()
-    linkGoogleTest()
-
+    includeJupiterEngine()
 end

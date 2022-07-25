@@ -7,3 +7,9 @@
 [submodule "external/googletest"]
 	path = external/googletest
 	url = https://github.com/robinvd995/googletest
+[submodule "external/glad"]
+	path = external/glad
+	url = https://github.com/robinvd995/glad
+[submodule "external/glfw"]
+	path = external/glfw
+	url = https://github.com/robinvd995/glfw
