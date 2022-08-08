@@ -5,20 +5,28 @@
 
 namespace Jupiter {
 
+	/// <summary>
+	/// 
+	/// </summary>
 	class CommandParser {
 
 	public:
-		/**/
 		CommandParser(CommandParser&) = delete;
-		/**/
 		CommandParser(int argc, char* argv[]) { for (int i = 0; i < argc; i++) { pushArgumentLine(argv[i]); } }
-		/**/
 		~CommandParser() {}
 
-		/**/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="argLine"></param>
 		void pushArgumentLine(const std::string& argLine) { m_Arguments.push_back(argLine); }
 
-		/**/
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="identifier"></param>
+		/// <param name="result"></param>
+		/// <returns></returns>
 		bool findArgument(const std::string& identifier, std::string& result) { 
 			const std::string pattern = identifier + "=";
 			const size_t patternLength = pattern.size();

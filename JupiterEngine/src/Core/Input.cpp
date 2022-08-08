@@ -7,9 +7,7 @@ namespace Jupiter {
 	KeyState::KeyState() : 
 		m_IsKeyDown(false),
 		m_WasKeyDown(false)
-	{
-		JPT_ENGINE_INFO("CALLED CONSTRUCTOR");
-	}
+	{}
 
 	KeyState::~KeyState() {}
 
@@ -31,13 +29,10 @@ namespace Jupiter {
 	// ----- START KeyStateRegistry -----
 
 	KeyStateRegistry::KeyStateRegistry() :
-		m_RegistrySize(0) {
+		m_RegistrySize(0) 
+	{}
 
-	}
-
-	KeyStateRegistry::~KeyStateRegistry() {
-		
-	}
+	KeyStateRegistry::~KeyStateRegistry() {}
 
 	KeyState* KeyStateRegistry::getKeyState(s_uint keycode) {
 		return &m_Registry[keycode];

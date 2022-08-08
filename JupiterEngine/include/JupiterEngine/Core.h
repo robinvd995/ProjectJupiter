@@ -5,11 +5,13 @@
 #include <cstdint>
 #include "JupiterCore/Core.h"
 
+// Typedefs for basic types
 typedef uint64_t	l_uint;
 typedef uint32_t	uint;
 typedef uint16_t	s_uint;
 typedef uint8_t		b_uint;
 
+// Logger function marcro's
 #ifdef JPT_ENGINE_ENABLE_LOGGER
 #define JPT_ENGINE_INFO(msg, ...) Jupiter::Engine::n_EngineLogger->info(msg, __VA_ARGS__)
 #define JPT_ENGINE_ERROR(msg, ...) Jupiter::Engine::n_EngineLogger->error(msg, __VA_ARGS__)
@@ -22,6 +24,41 @@ typedef uint8_t		b_uint;
 #define JPT_ENGINE_WARN(msg, ...)
 #endif // JPT_ENGINE_ENABLE_LOGGER
 
+// Pointer definitions, needs to be moved into its own file, probably JupiterMemory.h
+namespace Jupiter {
+
+	// Define unique pointer type
+	template<typename T>
+	using u_ptr = std::unique_ptr<T>;
+
+	// Define raw pointer type, TODO make it better
+	template<typename T>
+	using r_ptr = T*;
+
+	// Define shared pointer type
+	template<typename T>
+	using s_ptr = std::shared_ptr<T>;
+
+	// Create unique pointer object
+	template<typename T, typename ...Args>
+	constexpr u_ptr<T> createUnique(Args&&... args) {
+		return std::make_unique<T>(std::forward<Args>(args)...);
+	}
+
+	// Create shared pointer object
+	template<typename T, typename ...Args>
+	constexpr s_ptr<T> createShared(Args&&... args) {
+		return std::make_shared<T>(std::forward<Args>(args)...);
+	}
+
+	// Create raw pointer
+	template<typename T, typename ...Args>
+	constexpr r_ptr<T> createRaw(Args&&... args) {
+		return new T(std::forward<Args>(args)...);
+	}
+}
+
+// Logger setup functions, might need to move this to application
 namespace Jupiter::Engine {
 
 	inline Jupiter::Logger* n_EngineLogger = nullptr;

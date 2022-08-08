@@ -21,9 +21,10 @@ namespace Jupiter::Io {
 
 	// ---- BUFFERS -----
 
-	/*
-		// TODO
-	*/
+	/// <summary>
+	/// Buffer Property Template
+	/// </summary>
+	/// <typeparam name="T">The type of the values (I think)</typeparam>
 	template<typename T>
 	struct BufferPropertyTemplate {
 
@@ -42,6 +43,9 @@ namespace Jupiter::Io {
 		JPT_IO_TEST_CLASS(PropertiesTestAdapter)
 	};
 
+	/// <summary>
+	/// Index map for a property buffer
+	/// </summary>
 	class PropertyBufferIndexMap {
 
 	public:
@@ -58,9 +62,9 @@ namespace Jupiter::Io {
 		JPT_IO_TEST_CLASS(PropertiesTestAdapter)
 	};
 
-	/*
-		// TODO
-	*/
+	/// <summary>
+	/// Property Buffer
+	/// </summary>
 	class PropertyBuffer {
 
 	public:
@@ -69,8 +73,27 @@ namespace Jupiter::Io {
 		PropertyBuffer(PropertyBufferIndexMap* index_map);
 		~PropertyBuffer();
 
+		/// <summary>
+		/// Sets the default value of a property
+		/// </summary>
+		/// <param name="group_id">The group id the property is part of</param>
+		/// <param name="property_id">The id of the property</param>
 		void setPropertyDefaultValue(uint32_t group_id, uint32_t property_id);
+
+		/// <summary>
+		/// Sets the value of the property
+		/// </summary>
+		/// <param name="group_id">The group id the property is part of</param>
+		/// <param name="property_id">The id of the property</param>
+		/// <param name="value">The value to set</param>
 		void setPropertyValue(uint32_t group_id, uint32_t property_id, uint32_t value);
+
+		/// <summary>
+		/// Get the value of the given property from group
+		/// </summary>
+		/// <param name="group_id">The group id the property is part of</param>
+		/// <param name="property_id">The id of the property</param>
+		/// <returns></returns>
 		uint32_t getPropertyValue(uint32_t group_id, uint32_t property_id);
 
 	private:
@@ -86,9 +109,9 @@ namespace Jupiter::Io {
 
 	// ----- TEMPLATES -----
 
-	/*
-		// TODO
-	*/
+	/// <summary>
+	/// 
+	/// </summary>
 	struct PropertyValueTemplate {
 
 	public:
@@ -105,9 +128,9 @@ namespace Jupiter::Io {
 		JPT_IO_TEST_CLASS(PropertiesTestAdapter)
 	};
 
-	/*
-		// TODO
-	*/
+	/// <summary>
+	/// 
+	/// </summary>
 	struct PropertyTemplate {
 
 	public:
@@ -129,9 +152,9 @@ namespace Jupiter::Io {
 		JPT_IO_TEST_CLASS(PropertiesTestAdapter)
 	};
 
-	/*
-		// TODO
-	*/
+	/// <summary>
+	/// 
+	/// </summary>
 	struct PropertyGroupTemplate {
 
 	public:
@@ -158,31 +181,78 @@ namespace Jupiter::Io {
 
 	// ----- MANAGER -----
 
-	/*
-		// TODO	
-	*/
+	/// <summary>
+	/// The property manager class
+	/// </summary>
 	class PropertyManager {
 
 	public:
-		//TODO
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="name"></param>
+		/// <returns></returns>
 		static PropertyValueTemplate* addPropertyValueTemplate(uint32_t id, const std::string& name);
-		//TODO
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="name"></param>
+		/// <param name="accepted_values"></param>
+		/// <returns></returns>
 		static PropertyTemplate* addPropertyTemplate(uint32_t id, const std::string& name, BufferPropertyTemplate<PropertyValueTemplate> accepted_values);
-		//TODO
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="name"></param>
+		/// <param name="values"></param>
+		/// <returns></returns>
 		static PropertyGroupTemplate* addPropertyGroupTemplate(uint32_t id, const std::string& name, BufferPropertyTemplate<PropertyTemplate> values);
 				
-		//TODO
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="groups"></param>
+		/// <returns></returns>
 		static PropertyBufferIndexMap* createPropertyBufferIndexMap(const std::vector<PropertyGroupTemplate*>& groups);
-		//TODO
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index_map"></param>
+		/// <returns></returns>
 		static PropertyBuffer* createPropertyBuffer(PropertyBufferIndexMap* index_map);
-		//TODO
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="buffer"></param>
 		static void deletePropertyBuffer(PropertyBuffer* buffer);
 
-		//TODO
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="property_id"></param>
+		/// <returns></returns>
 		static uint32_t getDefaultValueForProperty(uint32_t property_id);
-		//TODO
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="property_template"></param>
+		/// <returns></returns>
 		static uint32_t getDefaultValueForProperty(PropertyTemplate* property_template);
-		//TODO
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="property_template"></param>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		static uint32_t getValueForPropertyAndValue(PropertyTemplate* property_template, const std::string& value);
 
 	private:

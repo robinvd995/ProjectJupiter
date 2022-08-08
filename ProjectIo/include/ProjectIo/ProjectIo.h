@@ -18,6 +18,9 @@ namespace Jupiter::Io {
 		ProjectIo(std::string& cfgFile, init_func func);
 		~ProjectIo();
 
+		/// <summary>
+		/// Main run function
+		/// </summary>
 		void run();
 
 	private:

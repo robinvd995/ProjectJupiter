@@ -39,3 +39,6 @@ build/**
 *.vcxproj
 *.vcxproj.user
 *.vcxproj.filters
+
+# Documentation
+doc/.$**

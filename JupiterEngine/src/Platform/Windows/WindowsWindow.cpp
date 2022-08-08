@@ -2,6 +2,7 @@
 
 #include "WindowsWindow.h"
 #include "Core/Input.h"
+#include "Renderer/RenderManager.h"
 
 #include <GLFW/glfw3.h>
 
@@ -61,6 +62,7 @@ namespace Jupiter {
 	}
 
 	void WindowsWindow::open() {
+		// Initialises GLFW if it is not already initialized
 		if (!s_GlfwInitialized) {
 			int success = glfwInit();
 			glfwSetErrorCallback(glfwErrorCallback);
@@ -80,12 +82,35 @@ namespace Jupiter {
 		glfwWindowHint(GLFW_FOCUS_ON_SHOW, m_ActiveWindowData.m_Flags & JPT_ENGINE_WINDOW_FLAG_FOCUS_ON_SHOW);
 		glfwWindowHint(GLFW_SCALE_TO_MONITOR, m_ActiveWindowData.m_Flags & JPT_ENGINE_WINDOW_FLAG_SCALE_TO_MONITOR);
 
+		// Creates the actual window object
 		m_WindowHandle = glfwCreateWindow(m_ActiveWindowData.m_Width, m_ActiveWindowData.m_Height,
 			m_ActiveWindowData.m_WindowTitle.c_str(), nullptr, nullptr);
 
-		m_WindowRenderContext = new WindowsOpenGLRenderContext();
-		m_WindowRenderContext->init(m_WindowHandle);
+		// Sets the render context for the window for the given Graphics API
+		switch (RenderManager::getCurrentGraphicsAPI()) {
+		case EnumGraphicsAPI::NONE:
+			JPT_ENGINE_ERROR("Cannot initialise render context for window with api 'NONE'");
+			break;
 
+		case EnumGraphicsAPI::OPEN_GL:
+			m_WindowRenderContext = new WindowsOpenGLRenderContext();
+			m_WindowRenderContext->init(m_WindowHandle);
+			break;
+
+		case EnumGraphicsAPI::DIRECTX11:
+			JPT_ENGINE_ERROR("Cannot initialise render context for window with api 'DIRECTX11'");
+			break;
+
+		case EnumGraphicsAPI::DIRECTX12:
+			JPT_ENGINE_ERROR("Cannot initialise render context for window with api 'DIRECTX12'");
+			break;
+
+		case EnumGraphicsAPI::VULKAN:
+			JPT_ENGINE_ERROR("Cannot initialise render context for window with api 'VULKAN'");
+			break;
+		}
+		
+		// Sets the pointer to the active window data
 		glfwSetWindowUserPointer(m_WindowHandle, &m_ActiveWindowData);
 
 		// CALLBACK FUNCTIONS
@@ -97,6 +122,7 @@ namespace Jupiter {
 			data.m_WindowInstance->keyCallback(window_handle, key, scancode, action, mods);
 		});
 
+		// Initializes the input manager, maybe put this in JupiterEngineApplication?
 		InputManager::s_Instance = new InputManager();
 		InputManager::s_Instance->m_KeyStateRegistries[(uint)EnumInputDevice::KEYBOARD].addTrackedKeys({ JPT_KEY_SPACE });
 	}
@@ -104,6 +130,7 @@ namespace Jupiter {
 	void WindowsWindow::close() {
 		delete m_WindowRenderContext;
 		delete InputManager::s_Instance;
+		glfwTerminate();
 	}
 
 	void WindowsWindow::keyCallback(GLFWwindow* window_handle, int key, int scancode, int action, int mods) {

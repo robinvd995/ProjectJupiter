@@ -1,0 +1,14 @@
+<io_configuration>
+	<id>SHADER_COMPILER</id>
+	<settings>
+		<output structure="1"/>
+	</settings>
+	<included_assets count="2">
+		<asset id="test.shader" src="assets/shaders/test.glsl" src_file_type="glsl" asset_type="shader">
+			<texture_properties min_filter="nearest_mipmap_nearest" mag_filter="linear" wrap_s="clamp_to_edge" wrap_t="mirrored_repeat" wrap_r="repeat"/>
+		</asset>
+		<asset id="collada.model_static" src="test.dae" src_file_type="collada" asset_type="model_static">
+			<collada_properties/>
+		</asset>
+	</included_assets>
+</io_configuration>

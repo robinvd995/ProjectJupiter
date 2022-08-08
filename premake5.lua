@@ -121,7 +121,7 @@ end
 
 function defaultDefines()
     defines {
-
+        "JPT_ENABLE_OPENGL"
     }
 end
 

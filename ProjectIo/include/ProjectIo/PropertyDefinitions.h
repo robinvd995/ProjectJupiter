@@ -2,6 +2,9 @@
 
 namespace Jupiter::Io {
 
+	/// <summary>
+	/// Enum containing all the property groups
+	/// </summary>
 	enum EnumPropertyGroups {
 		PG_UNDEFINED = 0,
 
@@ -12,6 +15,9 @@ namespace Jupiter::Io {
 		ENUM_PROPERTY_GROUPS_COUNT
 	};
 
+	/// <summary>
+	/// Enum containing all the property identifiers
+	/// </summary>
 	enum EnumPropertyIdentifiers {
 		PI_UNDEFINED = 0,
 
@@ -26,6 +32,9 @@ namespace Jupiter::Io {
 		ENUM_PROPERTY_IDENTIFIERS_COUNT
 	};
 
+	/// <summary>
+	/// Enum containing all the property values
+	/// </summary>
 	enum EnumPropertyValues {
 		PV_UNDEFINED = 0,
 

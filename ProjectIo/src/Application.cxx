@@ -26,6 +26,7 @@ inline static void initProjectIoFunc() {
 	// FileTypes
 	REG_FT(ftPng, FILE_TYPE_PNG, { "png" });
 	REG_FT(ftCollada, FILE_TYPE_COLLADA, { "collada", "dae" });
+	REG_FT(ftGlsl, FILE_TYPE_GLSL, { "glsl" });
 
 	// PropertyValueTemplates
 	REG_PV(pvTexNear, PV_TEXTURE_NEAREST, "nearest");
@@ -54,6 +55,7 @@ inline static void initProjectIoFunc() {
 	// Assets
 	REG_AS(asTexRgba, ASSET_TYPE_TEX_RGBA, { "tex_rgba" }, {{ftPng, dummy_func}}, {pgTexture});
 	REG_AS(asModelStatic, ASSET_TYPE_MODEL_STATIC, { "model_static" }, {{ftCollada, dummy_func}}, {});
+	REG_AS(asShader, ASSET_TYPE_SHADER, { "shader" }, { {ftGlsl, dummy_func} }, {});
 }
 
 int main(int argc, char* argv[])

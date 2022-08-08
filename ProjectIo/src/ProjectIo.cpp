@@ -109,12 +109,19 @@ namespace Jupiter::Io {
 
 			JPT_IO_INFO("Asset found: id=[0], src=[1], src_type=[2], asset_type=[3]", id, src, strSrcType, strAssetType);
 
+			// Check if the given template is compatible with the given src file, if not throw an error
 			if (!assetTemplate->isCompatibleWithSrcFileType(srcType)) {
 				JPT_IO_ERROR("An error occurred while loading an asset with id '[0]'\n    Asset type '[1]' is not compatible with src file of type '[2]'",
 					id, strAssetType, strSrcType);
 				return false;
 			}
 
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <param name="error"></param>
+			/// <param name="doc"></param>
+			/// <returns></returns>
 			PropertyBuffer* propBuffer = nullptr;
 			if (assetTemplate->hasProperties()) {
 				propBuffer = PropertyManager::createPropertyBuffer(assetTemplate->getPropertyBufferIndexMap());

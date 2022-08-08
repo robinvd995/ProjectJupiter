@@ -35,13 +35,38 @@ namespace Jupiter {
 	public:
 		virtual ~Window() {}
 
+		/// <summary>
+		/// Updates the window
+		/// </summary>
 		virtual void onUpdate() = 0;
+
+		/// <summary>
+		/// Retrieves the width of the window
+		/// </summary>
+		/// <returns>The window width in pixels</returns>
 		virtual const uint getWindowWidth() const = 0;
+
+		/// <summary>
+		/// Retrieves the height of the window
+		/// </summary>
+		/// <returns>The window height in pixels</returns>
 		virtual const uint getWindowHeight() const = 0;
+
+		/// <summary>
+		/// Retrieves the window should be closing or not
+		/// </summary>
+		/// <returns>true if window should close</returns>
 		virtual const bool shouldWindowClose() const = 0;
 
+		/// <summary>
+		/// Creates the window
+		/// </summary>
+		/// <param name="title">The title of the window</param>
+		/// <param name="width">Window width in pixels</param>
+		/// <param name="height">Window height in pixels</param>
+		/// <param name="flags">Window creation hints/flags that need to be passed during the creation</param>
+		/// <returns></returns>
 		static Window* createWindow(const std::string& title, uint width, uint height, uint flags);
-		// static Window* createWindow(const WindowProperties& window_properties);
 	};
 
 }

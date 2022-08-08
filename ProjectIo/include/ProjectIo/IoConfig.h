@@ -22,6 +22,9 @@
 
 namespace Jupiter::Io {
 
+	/// <summary>
+	/// Enum class defining the different types of output structures
+	/// </summary>
 	enum class IoOutputStructure {
 		UNDEFINED = 0,		// 0, err 
 		INDIVIDUAL = 1,		// all resources have its own output file

@@ -1,7 +1,7 @@
-#include "Application.h"
+#include "JupiterEngineApplication.h"
 
 int main(int argc, char** argv) {
-	Jupiter::Application* app = Jupiter::createApplication();
+	Jupiter::JupiterEngineApplication* app = Jupiter::createApplication();
 	app->run();
 	delete app;
 }

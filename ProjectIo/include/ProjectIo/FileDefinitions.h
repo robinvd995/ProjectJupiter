@@ -8,10 +8,14 @@
 
 namespace Jupiter::Io {
 
+	/// <summary>
+	/// 
+	/// </summary>
 	enum EnumFileType {
 		FILE_TYPE_UNDEFINED = 0,
 		FILE_TYPE_PNG = 1,
 		FILE_TYPE_COLLADA = 2,
+		FILE_TYPE_GLSL = 3,
 
 
 		ENUM_FILE_TYPE_COUNT

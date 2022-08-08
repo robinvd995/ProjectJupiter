@@ -1,8 +1,8 @@
-#include "JupiterEngine/Application.h"
+#include "JupiterEngine/JupiterEngineApplication.h"
 
 namespace Jupiter {
 
-	class Juno : public Application {
+	class Juno : public JupiterEngineApplication {
 
 	public:
 		Juno() {}
@@ -10,9 +10,8 @@ namespace Jupiter {
 
 	};
 
-	Application* createApplication() {
+	JupiterEngineApplication* createApplication() {
 		return new Juno();
 	}
 
 }
-
