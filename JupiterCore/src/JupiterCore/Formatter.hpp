@@ -25,8 +25,13 @@ namespace Jupiter {
 	public:
 		template<typename ...Ts>
 		inline std::string formatString(const std::string& str, Ts ...ts) {
-			std::vector<std::string> parameters;
-			((addStringToList(parameters, toString(ts))), ...);
+			//std::vector<std::string> parameters;
+			//((addStringToList(parameters, toString(ts))), ...);
+
+			std::stringstream stringStream;
+			std::vector<std::pair<uint32_t, uint32_t>> parameterIndexBuffer;
+			((addParameterToStream(stringStream, parameterIndexBuffer, (ts))), ...);
+			std::string parameterString = stringStream.str();
 
 			std::stringstream ss;
 			int i = 0;
@@ -43,11 +48,17 @@ namespace Jupiter {
 						j++;
 					}
 					if (end > 0 && j > 0) {
+//						std::string indexStr = str.substr((size_t)i + 1, j);
+//						uint32_t index = std::stoi(indexStr);
+//						if (index >= parameters.size()) return "Error, parameter count";
+//						charsToSkip += j + 2;
+//						ss << parameters[index];
+
 						std::string indexStr = str.substr((size_t)i + 1, j);
 						uint32_t index = std::stoi(indexStr);
-						if (index >= parameters.size()) return "Error, parameter count";
+						if (index >= parameterIndexBuffer.size()) return "Error, parameter count";
 						charsToSkip += j + 2;
-						ss << parameters[index];
+						ss << parameterString.substr(parameterIndexBuffer[index].first, parameterIndexBuffer[index].second - parameterIndexBuffer[index].first);
 					}
 				}
 				if (charsToSkip <= 0) ss << c;
@@ -75,22 +86,31 @@ namespace Jupiter {
 		Format m_Format = { '[', ']', 2 };
 
 	private:
-		inline static void addStringToList(std::vector<std::string>& list, std::string& str) { list.push_back(str); }
-		inline static void addStringToList(std::vector<std::string>& list) { }
+		template<typename T>
+		void addParameterToStream(std::ostream& os, std::vector<std::pair<uint32_t, uint32_t>>& index_buffer, T val) {
+			uint32_t start = os.tellp();
+			os << val;
+			uint32_t end = os.tellp();
+			index_buffer.push_back({ start, end });
+		}
 
-		inline static std::string toString(long long val) { return std::to_string(val); }
-		inline static std::string toString(double val) { return std::to_string(val); }
-		inline static std::string toString(float val) { return std::to_string(val); }
-		inline static std::string toString(int val) { return std::to_string(val); }
-		inline static std::string toString(long val) { return std::to_string(val); }
-		inline static std::string toString(long double val) { return std::to_string(val); }
-		inline static std::string toString(unsigned long long val) { return std::to_string(val); }
-		inline static std::string toString(unsigned int val) { return std::to_string(val); }
-		inline static std::string toString(unsigned long val) { return std::to_string(val); }
-		inline static std::string toString(const char* val) { return std::string(val); }
-		inline static std::string toString(const unsigned char* val) { return std::string((const char*)val); }
-		inline static std::string toString(std::string& val) { return val; }
-		inline static std::string toString(const std::string& val) { val; }
-		inline static std::string toString(bool val) { return val ? "true" : "false"; }
+		void addParameterToStream(std::ostream& os, std::vector<std::pair<uint32_t, uint32_t>>& index_buffer) {}
+//		inline static void addStringToList(std::vector<std::string>& list, std::string& str) { list.push_back(str); }
+//		inline static void addStringToList(std::vector<std::string>& list) { }
+
+//		inline static std::string toString(long long val) { return std::to_string(val); }
+//		inline static std::string toString(double val) { return std::to_string(val); }
+//		inline static std::string toString(float val) { return std::to_string(val); }
+//		inline static std::string toString(int val) { return std::to_string(val); }
+//		inline static std::string toString(long val) { return std::to_string(val); }
+//		inline static std::string toString(long double val) { return std::to_string(val); }
+//		inline static std::string toString(unsigned long long val) { return std::to_string(val); }
+//		inline static std::string toString(unsigned int val) { return std::to_string(val); }
+//		inline static std::string toString(unsigned long val) { return std::to_string(val); }
+//		inline static std::string toString(const char* val) { return std::string(val); }
+//		inline static std::string toString(const unsigned char* val) { return std::string((const char*)val); }
+//		inline static std::string toString(std::string& val) { return val; }
+//		inline static std::string toString(const std::string& val) { val; }
+//		inline static std::string toString(bool val) { return val ? "true" : "false"; }
 	};
 }
