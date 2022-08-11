@@ -18,10 +18,10 @@
 #define JPT_LOGGER_PREFIX_WARN          R"([WARN])"
 #define JPT_LOGGER_PREFIX_TRACE         R"([TRACE])"
 
-#define JPT_LOGGER_COLOR_WHITE          R"(\033[0m)"
-#define JPT_LOGGER_COLOR_RED            R"(\033[31m)"
-#define JPT_LOGGER_COLOR_GREEN          R"(\033[32m)"
-#define JPT_LOGGER_COLOR_YELLOW         R"(\033[33m)"
+#define JPT_LOGGER_COLOR_WHITE          "\033[0m"
+#define JPT_LOGGER_COLOR_RED            "\033[31m"
+#define JPT_LOGGER_COLOR_GREEN          "\033[32m"
+#define JPT_LOGGER_COLOR_YELLOW         "\033[33m"
 
 namespace Jupiter {
 
