@@ -4,9 +4,10 @@ namespace Jupiter::Io {
 
 	// ----- START FileType -----
 
-	FileType::FileType(const uint32_t file_type_id, const std::initializer_list<std::string>& aliases) :
+	FileType::FileType(const uint32_t file_type_id, const std::initializer_list<std::string>& aliases, const FileTypeLoadingFunc load_func) :
 		m_FileTypeId(file_type_id),
-		m_Aliases(aliases)
+		m_Aliases(aliases),
+		m_LoadingFunc(load_func)
 	{
 
 	}
@@ -36,9 +37,9 @@ namespace Jupiter::Io {
 		}
 	}
 
-	FileType* FileTypeManager::addFileType(uint32_t file_type_id, const std::initializer_list<std::string>& aliases) {
+	FileType* FileTypeManager::addFileType(uint32_t file_type_id, const std::initializer_list<std::string>& aliases, FileTypeLoadingFunc load_func) {
 		if (s_Instance->m_FileTypes[file_type_id]) return s_Instance->m_FileTypes[file_type_id];
-		FileType* fileType = new FileType(file_type_id, aliases);
+		FileType* fileType = new FileType(file_type_id, aliases, load_func);
 		s_Instance->m_FileTypes[file_type_id] = fileType;
 		return fileType;
 	}

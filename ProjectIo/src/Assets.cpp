@@ -53,7 +53,7 @@ namespace Jupiter::Io {
 	}
 
 	AssetTemplate* AssetManager::addAssetTemplate(uint32_t asset_id, const std::initializer_list<std::string>& asset_aliases, 
-		std::initializer_list<FileTypeTransformerPackage> src_file_types,std::initializer_list<PropertyGroupTemplate*> property_groups) {
+		std::initializer_list<PropertyGroupTemplate*> property_groups, std::initializer_list<FileTypeTransformerPackage> src_file_types) {
 
 		AssetTemplate* assetTemplate = createPtr<AssetTemplate>(asset_id, asset_aliases, src_file_types, property_groups);
 		s_Instance->m_AssetTemplates[asset_id] = assetTemplate;

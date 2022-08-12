@@ -57,6 +57,6 @@ namespace Jupiter {
 		/// </summary>
 		/// <param name="handle"></param>
 		void unmask(RenderHandle handle);
-
+		
 	};
 }

@@ -42,23 +42,23 @@ namespace Jupiter {
 		/// Adds a layer to the list
 		/// </summary>
 		/// <param name="layer">Pointer to the layer to be added</param>
-		void add(Layer* layer);
+		void add(r_ptr<Layer> layer);
 
 		/// <summary>
 		/// Adds a layer to the list, will always remain at the end of the list
 		/// </summary>
 		/// <param name="layer">Pointer to the layer to be added</param>
-		void addLast(Layer* layer);
+		void addLast(r_ptr<Layer> layer);
 
 		/// <summary>
 		/// Removes a layer from the list
 		/// </summary>
 		/// <param name="layer">Pointer to the layer that has to be removed</param>
 		/// <param name="isAddedLast">If the layer has been added trough the method addLast(Layer*) set this to true</param>
-		void removeLayer(Layer* layer, bool isAddedLast);
+		void removeLayer(r_ptr<Layer> layer, bool isAddedLast);
 
 	private:
-		std::vector<Layer*> m_Layers;
+		std::vector<r_ptr<Layer>> m_Layers;
 		uint m_InsertIndex = 0;
 	};
 

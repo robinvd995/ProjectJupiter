@@ -1,0 +1,6 @@
+<asset_register>
+	<entry i_id="0" name="asset.no_id0" location="loc0" begin="4" end="8"/>
+	<entry i_id="1" name="asset.no_id1" location="loc1" begin="16" end="32"/>
+	<entry i_id="2" name="asset.no_id2" location="loc2" begin="64" end="128"/>
+</asset_register>
+

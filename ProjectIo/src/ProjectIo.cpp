@@ -9,7 +9,6 @@
 #include "JupiterCore/Xml.h"
 
 #include "Core.h"
-#include "DataTransformer.hpp"
 
 #include "Properties.h"
 #include "FileTypes.h"
@@ -116,12 +115,6 @@ namespace Jupiter::Io {
 				return false;
 			}
 
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <param name="error"></param>
-			/// <param name="doc"></param>
-			/// <returns></returns>
 			PropertyBuffer* propBuffer = nullptr;
 			if (assetTemplate->hasProperties()) {
 				propBuffer = PropertyManager::createPropertyBuffer(assetTemplate->getPropertyBufferIndexMap());

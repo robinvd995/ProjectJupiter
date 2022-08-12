@@ -27,16 +27,16 @@ namespace Jupiter {
 
 	}
 
-	void LayerList::add(Layer* layer) {
+	void LayerList::add(r_ptr<Layer> layer) {
 		m_Layers.emplace(m_Layers.begin() + m_InsertIndex, layer);
 		m_InsertIndex++;
 	}
 
-	void LayerList::addLast(Layer* layer) {
-		m_Layers.emplace_back(m_Layers.end(), layer);
+	void LayerList::addLast(r_ptr<Layer> layer) {
+//		m_Layers.emplace_back(m_Layers.end(), layer);
 	}
 
-	void LayerList::removeLayer(Layer* layer, bool isAddedLast) {
+	void LayerList::removeLayer(r_ptr<Layer> layer, bool isAddedLast) {
 		auto found = std::find(m_Layers.begin(), m_Layers.end(), layer);
 		if (found != m_Layers.end()) {
 			m_Layers.erase(found);
@@ -45,5 +45,4 @@ namespace Jupiter {
 	}
 
 	// -----  END  LayerList -----
-
 }

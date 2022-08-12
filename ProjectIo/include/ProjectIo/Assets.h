@@ -11,10 +11,10 @@
 
 namespace Jupiter::Io {
 
-	typedef void (*AssetTransformFunction)();
+	typedef void (*AssetTransformFunction)(LoadedFile source_file);
 
 	/// <summary>
-	/// 
+	/// Struct containing the file type and the corresponding method to transform the source file into the output file
 	/// </summary>
 	struct FileTypeTransformerPackage {
 		FileType* m_SrcFileType;
@@ -96,7 +96,7 @@ namespace Jupiter::Io {
 		/// <param name="property_groups"></param>
 		/// <returns></returns>
 		static AssetTemplate* addAssetTemplate(uint32_t asset_id, const std::initializer_list<std::string>& asset_aliases, 
-			std::initializer_list<FileTypeTransformerPackage> src_file_types, std::initializer_list<PropertyGroupTemplate*> property_groups);
+			std::initializer_list<PropertyGroupTemplate*> property_groups, std::initializer_list<FileTypeTransformerPackage> src_file_types);
 
 		/// <summary>
 		/// 

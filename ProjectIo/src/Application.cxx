@@ -8,6 +8,9 @@
 #include "FileTypes.h"
 #include "Assets.h"
 
+#include "FileLoader.h"
+#include "AssetExporter.h"
+
 #include "JupiterCore/Core.h"
 #include "JupiterCore/Formatter.hpp"
 #include "JupiterCore/Log.hpp"
@@ -18,15 +21,13 @@
 #define REG_PG(x, ...) PropertyGroupTemplate* x = PropertyManager::addPropertyGroupTemplate(__VA_ARGS__)
 #define REG_AS(x, ...) AssetTemplate* x = AssetManager::addAssetTemplate(__VA_ARGS__)
 
-inline static void dummy_func() {}
-
 inline static void initProjectIoFunc() {
 	using namespace Jupiter::Io;
 
 	// FileTypes
-	REG_FT(ftPng, FILE_TYPE_PNG, { "png" });
-	REG_FT(ftCollada, FILE_TYPE_COLLADA, { "collada", "dae" });
-	REG_FT(ftGlsl, FILE_TYPE_GLSL, { "glsl" });
+	REG_FT(ftPng, FILE_TYPE_PNG, { "png" }, FileLoader::loadPNG);
+	REG_FT(ftCollada, FILE_TYPE_COLLADA, { "collada", "dae" }, FileLoader::loadCollada);
+	REG_FT(ftGlsl, FILE_TYPE_GLSL, { "glsl" }, FileLoader::loadGlsl);
 
 	// PropertyValueTemplates
 	REG_PV(pvTexNear, PV_TEXTURE_NEAREST, "nearest");
@@ -53,9 +54,17 @@ inline static void initProjectIoFunc() {
 	REG_PG(pgTexture, PG_GROUP_TEXTURE, "texture_properties", { ptTextMinFilt, ptTexMagFilt, ptTexWrapS, ptTexWrapT, ptTexWrapR });
 
 	// Assets
-	REG_AS(asTexRgba, ASSET_TYPE_TEX_RGBA, { "tex_rgba" }, {{ftPng, dummy_func}}, {pgTexture});
-	REG_AS(asModelStatic, ASSET_TYPE_MODEL_STATIC, { "model_static" }, {{ftCollada, dummy_func}}, {});
-	REG_AS(asShader, ASSET_TYPE_SHADER, { "shader" }, { {ftGlsl, dummy_func} }, {});
+	REG_AS(asTexRgba, ASSET_TYPE_TEX_RGBA, { "tex_rgba" }, { pgTexture }, {
+		{ ftPng, AssetExporter::exportTexRGBA }
+	});
+
+	REG_AS(asModelStatic, ASSET_TYPE_MODEL_STATIC, { "model_static" }, {},  { 
+		{ ftCollada, AssetExporter::exportModelStatic }
+	});
+
+	REG_AS(asShader, ASSET_TYPE_SHADER, { "shader" }, {},  { 
+		{ ftGlsl, AssetExporter::exportShader } 
+	});
 }
 
 int main(int argc, char* argv[])
