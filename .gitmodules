@@ -13,3 +13,6 @@
 [submodule "external/glfw"]
 	path = external/glfw
 	url = https://github.com/robinvd995/glfw
+[submodule "external/wxWidgets"]
+	path = external/wxWidgets
+	url = https://github.com/robinvd995/wxWidgets

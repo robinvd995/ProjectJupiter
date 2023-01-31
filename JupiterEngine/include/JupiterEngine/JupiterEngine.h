@@ -3,13 +3,10 @@
 #include "Configuration.h"
 
 #include <cstdint>
-#include "JupiterCore/Core.h"
+#include "JupiterCore/JupiterCoreDefinitions.h"
+#include "JupiterCore/JupiterCore.h"
 
-// Typedefs for basic types
-typedef uint64_t	l_uint;
-typedef uint32_t	uint;
-typedef uint16_t	s_uint;
-typedef uint8_t		b_uint;
+#include <PxPhysics.h>
 
 // Logger function marcro's
 #ifdef JPT_ENGINE_ENABLE_LOGGER
@@ -65,6 +62,29 @@ namespace Jupiter::Engine {
 	void initializeEngineLogger(l_uint flags);
 	void deleteLogger();
 }
+
+// Macro to setup a manager class (header file)
+#define MANAGER_CLASS(class_name) \
+private: \
+class_name() = default; \
+class_name(const class_name&) = delete; \
+~class_name() = default; \
+class_name& operator=(const class_name&) = delete; \
+static class_name* s_Instance; \
+friend class JupiterEngineApplication
+
+// Macro to define a manager class (source file)
+#define MANAGER_CLASS_DEFINITION(class_name) \
+class_name* class_name::s_Instance = nullptr
+
+// Typedefs of PhysX math classes for ease of use
+typedef physx::PxVec2 Vector2;
+typedef physx::PxVec3 Vector3;
+typedef physx::PxVec4 Vector4;
+typedef physx::PxQuat Quaternion;
+typedef physx::PxMat33 Matrix3_3;
+typedef physx::PxMat34 Matrix3_4;
+typedef physx::PxMat44 Matrix4_4;
 
 // ----- GLFW Input -----
 #ifdef JPT_ENABLE_GLFW_INPUT
@@ -196,4 +216,4 @@ namespace Jupiter::Engine {
 #define JPT_KEY_RIGHT_ALT          346
 #define JPT_KEY_RIGHT_SUPER        347
 #define JPT_KEY_MENU               348
-#endif // JPT_ENABLE_KEY_CODES
+#endif // JPT_ENABLE_GLFW_INPUT

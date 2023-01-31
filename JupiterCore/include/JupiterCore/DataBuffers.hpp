@@ -91,7 +91,7 @@ namespace Jupiter::Core {
 		size_t m_Iterator = 0;
 
 		size_t m_MarkedPos = 0;
-		size_t m_MaxSegmentedWriteSize = 65536;
+		size_t m_MaxSegmentedWriteSize = 65535;
 
 		bool m_IsDataOwner = true;
 	};

@@ -18,7 +18,7 @@
 
 #else
 #error NO TARGET PLATFORM HAS BEEN DEFINED!
-#endif // JPT_PLATFORM_WINDOWS
+#endif
 
 #ifdef JPT_ENABLE_ASSERTS
 #define JPT_ASSERT(x, ...) if(!x) { JPT_CORE_ERROR(__VA_ARGS__); __debugbreak(); }

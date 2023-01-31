@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GraphicsApi.h"
-#include "Renderer/RenderBuffers.h"
+#include "JupiterEngine/Renderer/RenderBuffers.h"
 
 namespace Jupiter {
 

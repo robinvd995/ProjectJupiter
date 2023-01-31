@@ -1,41 +1,35 @@
 #pragma once
 #ifdef JPT_ENABLE_OPENGL
-#include "Renderer/RenderBuffers.h"
 
-#include "Core.h"
+#include "OpenGL.h"
 
-#include <glad/glad.h>
+#include "JupiterEngine/Renderer/RenderBuffers.h"
 
 namespace Jupiter {
 
-	class OpenGLVertexBuffer : public VertexBuffer {
+//	class OpenGLVertexArray : public VertexArray {
+//
+//	public:
+//		virtual ~OpenGLVertexArray() override {
+//			
+//		}
+//
+//		virtual void bind() const override {
+//			
+//		}
+//
+//		virtual void unbind() const override {
+//			
+//		}
+//	};
 
-	public:
-		OpenGLVertexBuffer(float* vertex_data, uint count) {
-			glGenBuffers(1, &m_BufferHandle);
-			glBindBuffer(GL_ARRAY_BUFFER, m_BufferHandle);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * count, vertex_data, GL_STATIC_DRAW);
-		}
-
-		virtual ~OpenGLVertexBuffer() {
-			glDeleteBuffers(1, &m_BufferHandle);
-		}
-
-		virtual void bind() const override {
-			glBindBuffer(GL_ARRAY_BUFFER, m_BufferHandle);
-		}
-
-		virtual void unbind() const override {
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-		}
-
-	private:
-		uint m_BufferHandle = 0;
-	};
-
+	/// <summary>
+	/// OpenGL representation of an IndexBuffer object
+	/// </summary>
 	class OpenGLIndexBuffer : public IndexBuffer {
 
-		OpenGLIndexBuffer(uint* indices, uint count)  :
+	public:
+		OpenGLIndexBuffer(uint* indices, uint count) :
 			m_IndicesCount(count)
 		{
 			glGenBuffers(1, &m_BufferHandle);
@@ -59,6 +53,71 @@ namespace Jupiter {
 		uint m_BufferHandle = 0;
 		uint m_IndicesCount = 0;
 
+	};
+
+	/// <summary>
+	/// OpenGL representation of an VertexBuffer object
+	/// </summary>
+	class OpenGLVertexBuffer : public VertexBuffer {
+
+	public:
+		OpenGLVertexBuffer(float* vertex_data, uint count, const VertexLayout& layout, VertexBufferSpecification& bufferSpec) {
+			// Generate vertex array
+			glGenVertexArrays(1, &m_VertexArrayHandle);
+			glBindVertexArray(m_VertexArrayHandle);
+
+			// Generate vertex buffer
+			glGenBuffers(1, &m_BufferHandle);
+			glBindBuffer(GL_ARRAY_BUFFER, m_BufferHandle);
+
+			// Set buffer data
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * count, vertex_data, OpenGL::map_BufferUsage[(uint)bufferSpec.bufferUsage]);
+
+			JPT_ASSERT((layout.getElementCount() > 0), "Vertex Layout has not specified elements!");
+
+			// Iterate trough the elements withing the layout
+			for (int i = 0; i < layout.getElementCount(); i++) {
+				VertexLayoutElement element = layout.getElement(i);
+
+				// Enable the attributes and bind them
+				glEnableVertexAttribArray(i);
+				glVertexAttribPointer(i, element.componentCount(), OpenGL::map_PrimitiveType[(uint)element.dataType().primitive()], 
+					element.normalized(), layout.getStride(), (const void*)element.offset());
+			}
+		}
+
+		virtual ~OpenGLVertexBuffer() {
+			glDeleteBuffers(1, &m_BufferHandle);
+		}
+
+		virtual void bind() const override {
+			glBindVertexArray(m_VertexArrayHandle);
+			glBindBuffer(GL_ARRAY_BUFFER, m_BufferHandle);
+		}
+
+		virtual void unbind() const override {
+			glBindVertexArray(0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+		}
+
+//		virtual void setVertexLayout(const VertexLayout& layout) override {
+//			JPT_ASSERT((layout.getElementCount() > 0), "Vertex Layout has not specified elements!");
+//
+//			for (int i = 0; i < layout.getElementCount(); i++) {
+//				VertexLayoutElement element = layout.getElement(i);
+//				glEnableVertexAttribArray(i);
+//				glVertexAttribPointer(i, element.componentCount(), GL_FLOAT, element.normalized(), 
+//					layout.getStride(), (const void*)element.offset());
+//			}
+//		}
+
+		virtual void setIndexBuffer() override {
+
+		}
+
+	private:
+		uint m_VertexArrayHandle = 0;
+		uint m_BufferHandle = 0;
 	};
 
 }

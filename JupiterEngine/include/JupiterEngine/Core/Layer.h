@@ -1,6 +1,8 @@
 #pragma once
 
-#include "Core.h"
+#include "JupiterEngine/JupiterEngine.h"
+
+#include <set>
 
 namespace Jupiter {
 
@@ -10,56 +12,93 @@ namespace Jupiter {
 	class Layer {
 
 	public:
-		Layer();
-		virtual ~Layer();
+		virtual ~Layer() {};
 
 		/// <summary>
 		/// Called whenever the layer gets pushed to the stack
 		/// </summary>
-		virtual void onAdded();
+		virtual void onAdded() = 0;
 
 		/// <summary>
-		/// Called whenever the layer gets popper from the stack
+		/// Called whenever the layer gets popped from the stack
 		/// </summary>
-		virtual void onRemoved();
+		virtual void onRemoved() = 0;
 
 		/// <summary>
-		/// main update loop of the layer
+		/// Update loop with an fluid timestep
 		/// </summary>
-		virtual void onUpdate();
+		virtual void onUpdate() = 0;
+
+		/// <summary>
+		/// Update loop with a fixed timestep
+		/// </summary>
+		virtual void onFixedUpdate() = 0;
+	};
+
+	typedef uint LayerHandle;
+
+	/// <summary>
+	/// Entry struct for the LayerSet class
+	/// </summary>
+	struct LayerSetEntry {
+		const r_ptr<Layer> m_Value = nullptr;
+		const uint m_Priority = 0;
+
+		LayerHandle m_Handle;
+
+		LayerSetEntry() = delete;
+		LayerSetEntry(r_ptr<Layer> v, uint p, LayerHandle h);
+
+		bool operator < (const LayerSetEntry& other) const;
+		bool operator ==(const LayerSetEntry& other) const;
 	};
 
 	/// <summary>
-	/// Contains a collection of the current layers in the scene
+	/// Functor
 	/// </summary>
-	class LayerList {
+	class LayerFactoryFunctor {
+	
+	public:
+		virtual r_ptr<Layer> operator()() = 0;
+	};
+
+	/// <summary>
+	/// Contains a collection of the current layers
+	/// </summary>
+	class LayerSet {
 
 	public:
-		LayerList();
-		~LayerList();
+		LayerSet() = default;
+		~LayerSet() = default;
 
 		/// <summary>
-		/// Adds a layer to the list
+		/// Adds a layer to the application
 		/// </summary>
-		/// <param name="layer">Pointer to the layer to be added</param>
-		void add(r_ptr<Layer> layer);
+		/// <param name="layer">Pointer to the layer object</param>
+		/// <param name="priority">Determines the position in the LayerSet, higher priority means earlier in the set</param>
+		/// <returns>The layer handle used to further interact with the layer</returns>
+//		LayerHandle addLayer(LayerFactoryFunctor& factoryfunctor, uint priority);
 
 		/// <summary>
-		/// Adds a layer to the list, will always remain at the end of the list
+		/// Removes a layer from the set
 		/// </summary>
-		/// <param name="layer">Pointer to the layer to be added</param>
-		void addLast(r_ptr<Layer> layer);
-
-		/// <summary>
-		/// Removes a layer from the list
-		/// </summary>
-		/// <param name="layer">Pointer to the layer that has to be removed</param>
-		/// <param name="isAddedLast">If the layer has been added trough the method addLast(Layer*) set this to true</param>
-		void removeLayer(r_ptr<Layer> layer, bool isAddedLast);
+		/// <param name="layerhandle">The layerhandle of the layer wanting to be removed</param>
+//		r_ptr<Layer> removeLayer(LayerHandle layerhandle);
 
 	private:
-		std::vector<r_ptr<Layer>> m_Layers;
-		uint m_InsertIndex = 0;
+		/// <summary>
+		/// Gets the next available handle
+		/// </summary>
+		/// <returns>The next available handle</returns>
+		LayerHandle getNextAvailableHandle();
+
+	private:
+		std::set<LayerSetEntry> m_Layers;
+		// std::vector<LayerHandle> m_LayerHandles;
+
+		uint m_NextHandle = 0;
+
+		friend class JupiterEngineApplication;
 	};
 
 }

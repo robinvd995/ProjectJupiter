@@ -20,8 +20,12 @@ function createProjectIo()
     includeRapidXml()
     includeAssimp()
     includeGoogleTest()
+    includeVulkan()
 
     linkAssimp()
     linkGoogleTest()
+
+    linkVulkanShaderC()
+    linkVulkanSPIRVCross()
 
 end

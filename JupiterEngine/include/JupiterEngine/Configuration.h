@@ -11,3 +11,6 @@
 
 // Define if openGL is enabled
 // #define JPT_ENABLE_OPENGL
+
+// Define if the config parser trims whitespaces from the config files
+#define JPT_CONFIG_TRIM_WHITESPACES

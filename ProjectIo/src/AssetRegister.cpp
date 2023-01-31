@@ -1,4 +1,4 @@
-#include "AssetRegister.h"
+#include "ProjectIo/AssetRegister.h"
 
 #include "JupiterCore/Xml.h"
 

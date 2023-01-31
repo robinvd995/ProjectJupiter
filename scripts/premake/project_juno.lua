@@ -17,4 +17,6 @@ function createProjectJuno()
 
     includeJupiterCore()
     includeJupiterEngine()
+
+    includePhysX()
 end

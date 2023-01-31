@@ -1,6 +1,6 @@
-#include "Properties.h"
+#include "ProjectIo/Properties.h"
 
-#include "FileTypes.h"
+#include "ProjectIo/FileTypes.h"
 #include "JptMemory.h"
 
 #include <set>

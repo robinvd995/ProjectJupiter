@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core.h"
+#include "JupiterEngine/JupiterEngine.h"
 
 /**
  * How to adress a resource? dont want strings because they are more expansive to compare.

@@ -1,7 +1,7 @@
 #ifdef JPT_PLATFORM_WINDOWS
 #pragma once
 
-#include "Core/Window.h"
+#include "JupiterEngine/Core/Window.h"
 #include "WindowsRenderContext.h"
 
 namespace Jupiter {

@@ -23,6 +23,19 @@ function createJupiterEngine()
     linkGLFW()
     includeGlad()
     includeGLFW()
+
+    includeGoogleTest()
+    linkGoogleTest()
+
+    -- Include vulkan
+    includeVulkan()
+
+    -- Link vulkan libraries
+    linkVulkanShaderC()
+    linkVulkanSPIRVCross()
+
+    -- Link and include PhysX
+    addPhysX()
 end
 
 function includeJupiterEngine()

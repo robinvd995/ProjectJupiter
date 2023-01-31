@@ -1,17 +1,9 @@
-#include "JupiterEngine/JupiterEngineApplication.h"
+#include "Core/JunoApplication.hpp"
 
 namespace Jupiter {
 
-	class Juno : public JupiterEngineApplication {
-
-	public:
-		Juno() {}
-		~Juno() {}
-
-	};
-
 	JupiterEngineApplication* createApplication() {
-		return new Juno();
+		return new Juno::JunoApplication();
 	}
 
 }

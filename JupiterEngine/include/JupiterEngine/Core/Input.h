@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core.h"
+#include "JupiterEngine/JupiterEngine.h"
 
 namespace Jupiter {
 

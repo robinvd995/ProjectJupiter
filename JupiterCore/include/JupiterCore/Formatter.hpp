@@ -5,10 +5,15 @@
 #include <memory>
 #include <sstream>
 
-// #define JPT_CORE_FORMATTER_MAX_PARAMETER_INSTANCES 16
+#ifndef JPT_CORE_FORMATTER_MAX_PARAMETER_INSTANCES
+#define JPT_CORE_FORMATTER_MAX_PARAMETER_INSTANCES 2
+#endif // !JPT_CORE_FORMATTER_MAX_PARAMETER_INSTANCES
 
 namespace Jupiter {
 
+	/// <summary>
+	/// 
+	/// </summary>
 	struct Format {
 		const char m_Start;
 		const char m_End;
@@ -20,6 +25,9 @@ namespace Jupiter {
 		{}
 	};
 
+	/// <summary>
+	/// 
+	/// </summary>
 	class Formatter {
 
 	public:
@@ -69,6 +77,7 @@ namespace Jupiter {
 			return ss.str();
 		}
 
+	public:
 		inline static Formatter* createFormatter(Format format) {
 			return new Formatter(format);
 		}
@@ -83,7 +92,7 @@ namespace Jupiter {
 		~Formatter() {}
 
 	private:
-		Format m_Format = { '[', ']', 2 };
+		Format m_Format = { '[', ']', JPT_CORE_FORMATTER_MAX_PARAMETER_INSTANCES };
 
 	private:
 		template<typename T>

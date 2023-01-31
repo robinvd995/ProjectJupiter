@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Shader.h"
+#include "JupiterEngine/JupiterEngine.h"
+#include "JupiterEngine/Renderer/Shader.h"
 
 namespace Jupiter {
 

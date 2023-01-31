@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core.h"
+#include "JupiterEngine/JupiterEngine.h"
 
 #include <string>
 
@@ -18,17 +18,6 @@
 #define JPT_ENGINE_WINDOW_FLAG_VSYNC						2048
 
 namespace Jupiter {
-
-//	struct WindowProperties {
-//		const std::string m_WindowTitle;
-//		const uint m_WindowWidth;
-//		const uint m_WindowHeight;
-//		const uint m_WindowFlags;
-//
-//		WindowProperties(const std::string& title, uint width, uint height, uint flags) :
-//			m_WindowTitle(title), m_WindowWidth(width), m_WindowHeight(height), m_WindowFlags(flags)
-//		{}
-//	};
 
 	class Window {
 

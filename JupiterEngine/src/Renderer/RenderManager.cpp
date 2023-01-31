@@ -1,6 +1,6 @@
-#include "Renderer/RenderManager.h"
+#include "JupiterEngine/Renderer/RenderManager.h"
 
-#include "Renderer/RenderFunctions.h"
+#include "JupiterEngine/Renderer/RenderFunctions.h"
 
 #ifdef JPT_ENABLE_OPENGL
 #include "Platform/OpenGL/OpenGLRenderFunctions.hpp"

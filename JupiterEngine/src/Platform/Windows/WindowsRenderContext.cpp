@@ -1,7 +1,7 @@
 #ifdef JPT_PLATFORM_WINDOWS
 #include "WindowsRenderContext.h"
 
-#include <Core.h>
+#include <JupiterEngine/JupiterEngine.h>
 #include <glad/glad.h>
 
 namespace Jupiter {

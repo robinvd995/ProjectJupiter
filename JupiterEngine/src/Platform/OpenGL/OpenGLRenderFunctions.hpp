@@ -1,9 +1,10 @@
 #pragma once
 #ifdef JPT_ENABLE_OPENGL
 
+#include "OpenGL.h"
 
-#include "Renderer/GraphicsApi.h"
-#include <glad/glad.h>
+#include "OpenGLRenderBuffers.hpp"
+#include "OpenGLShader.hpp"
 
 namespace Jupiter::OpenGL {
 
@@ -32,6 +33,22 @@ namespace Jupiter::OpenGL {
 
 	inline static void drawArrays() {
 
+	}
+
+//	inline static s_ptr<VertexArray> createVertexArray() {
+//		return createShared<OpenGLVertexArray>();
+//	}
+
+	inline static s_ptr<VertexBuffer> createVertexBuffer(float* vertex_data, uint count, const VertexLayout& layout, VertexBufferSpecification& bufferSpec) {
+		return createShared<OpenGLVertexBuffer>(vertex_data, count, layout, bufferSpec);
+	}
+
+	inline static s_ptr<IndexBuffer> createIndexBuffer(uint* index_data, uint count) {
+		return createShared<OpenGLIndexBuffer>(index_data, count);
+	}
+
+	inline static s_ptr<Shader> createShader(ShaderLoadData& data) {
+		return createShared<OpenGLShader>(data);
 	}
 
 }

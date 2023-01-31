@@ -1,8 +1,8 @@
 #ifdef JPT_PLATFORM_WINDOWS
 
 #include "WindowsWindow.h"
-#include "Core/Input.h"
-#include "Renderer/RenderManager.h"
+#include "JupiterEngine/Core/Input.h"
+#include "JupiterEngine/Renderer/RenderManager.h"
 
 #include <GLFW/glfw3.h>
 

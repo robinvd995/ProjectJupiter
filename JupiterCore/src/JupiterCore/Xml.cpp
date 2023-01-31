@@ -1,6 +1,6 @@
 #ifndef JPT_CORE_EXCLUDE_XML
 
-#include "Xml.h"
+#include "JupiterCore/Xml.h"
 
 #include "rapidxml_print.hpp"
 

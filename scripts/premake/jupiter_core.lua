@@ -15,11 +15,15 @@ function createJupiterCore()
 
     includeRapidXml()
 
+    includeVulkan()
+
+    linkVulkanShaderC()
+    linkVulkanSPIRVCross()
 end
 
 function includeJupiterCore()
 
-    includedirs { "JupiterCore/src" }
+    includedirs { "JupiterCore/include" }
     links { "JupiterCore" }
 
 end

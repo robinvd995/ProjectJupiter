@@ -1,18 +1,18 @@
-#include "ProjectIo.h"
+#include "ProjectIo/ProjectIo.h"
 
 #include <memory>
 #include <filesystem>
 
-#include "JupiterCore/Core.h"
+#include "JupiterCore/JupiterCore.h"
 #include "JupiterCore/Log.hpp"
 #include "JupiterCore/Formatter.hpp"
 #include "JupiterCore/Xml.h"
 
-#include "Core.h"
+#include "ProjectIo/Core.h"
 
-#include "Properties.h"
-#include "FileTypes.h"
-#include "Assets.h"
+#include "ProjectIo/Properties.h"
+#include "ProjectIo/FileTypes.h"
+#include "ProjectIo/Assets.h"
 
 #include "JptMemory.h"
 

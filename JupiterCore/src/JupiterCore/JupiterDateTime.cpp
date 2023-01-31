@@ -1,12 +1,11 @@
-#include "Time.h"
+#include "JupiterCore/JupiterDateTime.h"
 
 #include <sstream>
 #include <iomanip>
-#include <ctime>
 
 namespace Jupiter {
 
-	std::string Time::getCurTimeAsStr() {
+	std::string JDateTime::getCurTimeAsStr() {
 		auto t = std::time(nullptr);
 		auto tm = std::localtime(&t);
 		std::stringstream ss;
@@ -14,7 +13,7 @@ namespace Jupiter {
 		return ss.str();
 	}
 
-	std::string Time::getCurDateAsStr() {
+	std::string JDateTime::getCurDateAsStr() {
 		auto t = std::time(nullptr);
 		auto tm = std::localtime(&t);
 		std::stringstream ss;

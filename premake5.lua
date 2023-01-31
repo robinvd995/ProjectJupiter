@@ -1,5 +1,15 @@
+-- Vulkan stuff
+VULKAN_SDK      = os.getenv("VULKAN_SDK")
+
+VULKAN_LIB      = "%{VULKAN_SDK}/Lib"
+VULKAN_INCLUDE  = "%{VULKAN_SDK}/Include"
+
+-- include library scripts
+include "scripts/premake/libraries/physx.lua"
+
 -- includes --
 include "scripts/premake/jupiter_core.lua"
+include "scripts/premake/jupiter_compiler.lua"
 include "scripts/premake/jupiter_engine.lua"
 
 include "scripts/premake/project_io.lua"
@@ -48,6 +58,44 @@ end
 
 function includeGLFW()
     includedirs "external/glfw/include"
+end
+
+function includeVulkan()
+    includedirs "%{VULKAN_INCLUDE}"
+end
+
+function linkVulkanShaderC()
+    filter "configurations:Debug"
+    links "%{VULKAN_LIB}/shaderc_sharedd.lib"
+
+    filter "configurations:Test"
+    links "%{VULKAN_LIB}/shaderc_sharedd.lib"
+
+    filter "configurations:Release"
+    links "%{VULKAN_LIB}/shaderc_shared.lib"
+
+    filter {}
+end
+
+function linkVulkanSPIRVCross()
+    filter "configurations:Debug"
+    links "%{VULKAN_LIB}/spirv-cross-cored.lib"
+    links "%{VULKAN_LIB}/spirv-cross-glsld.lib"
+    links "%{VULKAN_LIB}/spirv-cross-hlsld.lib"
+    links "%{VULKAN_LIB}/SPIRV-Toolsd.lib"
+
+    filter "configurations:Test"
+    links "%{VULKAN_LIB}/spirv-cross-cored.lib"
+    links "%{VULKAN_LIB}/spirv-cross-glsld.lib"
+    links "%{VULKAN_LIB}/spirv-cross-hlsld.lib"
+    links "%{VULKAN_LIB}/SPIRV-Toolsd.lib"
+
+    filter "configurations:Release"
+    links "%{VULKAN_LIB}/spirv-cross-core.lib"
+    links "%{VULKAN_LIB}/spirv-cross-glsl.lib"
+    links "%{VULKAN_LIB}/spirv-cross-hlsl.lib"
+
+    filter {}
 end
 
 -- basic functions --
@@ -113,9 +161,9 @@ end
 
 function defaultIncludes()
     includedirs "%{prj.name}/src"
-    includedirs "%{prj.name}/include/%{prj.name}"
+    includedirs "%{prj.name}/include"
     filter "configurations:Test"
-        includedirs "%{prj.name}/test"
+    includedirs "%{prj.name}/test"
     filter {}
 end
 
@@ -146,8 +194,9 @@ group ""
 -- create projects --
 
 createJupiterCore()
-createJupiterEngine()
 
+createJupiterEngine()
+createJupiterCompiler()
 createProjectIo()
 
 createProjectJuno()

@@ -1,17 +1,17 @@
 #include <iostream>
 #include <string>
 
-#include "CommandParser.hpp"
-#include "ProjectIo.h"
+#include "JupiterCore/JupiterCommandParser.h"
+#include "ProjectIo/ProjectIo.h"
 
-#include "Properties.h"
-#include "FileTypes.h"
-#include "Assets.h"
+#include "ProjectIo/Properties.h"
+#include "ProjectIo/FileTypes.h"
+#include "ProjectIo/Assets.h"
 
-#include "FileLoader.h"
-#include "AssetExporter.h"
+#include "ProjectIo/FileLoader.h"
+#include "ProjectIo/AssetExporter.h"
 
-#include "JupiterCore/Core.h"
+#include "JupiterCore/JupiterCore.h"
 #include "JupiterCore/Formatter.hpp"
 #include "JupiterCore/Log.hpp"
 
