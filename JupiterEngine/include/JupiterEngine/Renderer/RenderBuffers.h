@@ -19,6 +19,16 @@ namespace Jupiter {
 		STREAM = 2
 	};
 
+	class IndexBuffer {
+
+	public:
+		virtual ~IndexBuffer() {};
+
+		virtual void bind() const = 0;
+		virtual void unbind() const = 0;
+
+	};
+
 	struct VertexBufferSpecification {
 		const BufferUsage bufferUsage;
 
@@ -34,18 +44,20 @@ namespace Jupiter {
 		virtual void bind() const = 0;
 		virtual void unbind() const = 0;
 
-//		virtual void setVertexLayout(const VertexLayout& layout) = 0;
 		virtual void setIndexBuffer() = 0;
 	};
 
-	class IndexBuffer {
+	class UniformBuffer {
 
 	public:
-		virtual ~IndexBuffer() {};
+		virtual ~UniformBuffer() {}
 
-		virtual void bind() const = 0;
-		virtual void unbind() const = 0;
+		virtual void bind(uint bufferbinding) = 0;
 
+		virtual void bufferData(const char* data) = 0;
+		virtual void bufferData(const uint offset, const uint size, const char* data) = 0;
+
+	private:
 	};
 
 }

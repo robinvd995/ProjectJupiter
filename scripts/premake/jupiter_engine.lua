@@ -15,6 +15,7 @@ function createJupiterEngine()
     defaultIncludes()
     defaultDefines()
 
+    includeStbImage()
     includeJupiterCore()
 
     defines "GLFW_INCLUDE_NONE"

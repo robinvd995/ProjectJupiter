@@ -5,6 +5,7 @@
 
 #include "OpenGLRenderBuffers.hpp"
 #include "OpenGLShader.hpp"
+#include "OpenGLTexture.hpp"
 
 namespace Jupiter::OpenGL {
 
@@ -31,8 +32,8 @@ namespace Jupiter::OpenGL {
 
 	}
 
-	inline static void drawArrays() {
-
+	inline static void drawArrays(uint first, uint size) {
+		glDrawArrays(GL_TRIANGLES, first, size);
 	}
 
 //	inline static s_ptr<VertexArray> createVertexArray() {
@@ -49,6 +50,14 @@ namespace Jupiter::OpenGL {
 
 	inline static s_ptr<Shader> createShader(ShaderLoadData& data) {
 		return createShared<OpenGLShader>(data);
+	}
+
+	inline static s_ptr<Texture> createTexture2D(TextureSource& source, TextureSpecification& spec) {
+		return createShared<OpenGLTexture2D>(source, spec);
+	}
+
+	inline static s_ptr<UniformBuffer> createUniformBuffer(uint size) {
+		return createShared<OpenGLUniformBuffer>(size);
 	}
 
 }

@@ -120,6 +120,42 @@ namespace Jupiter {
 		uint m_BufferHandle = 0;
 	};
 
+	class OpenGLUniformBuffer : public UniformBuffer {
+
+	public:
+		OpenGLUniformBuffer(const uint size) : 
+			c_BufferSize(size)
+		{
+			glGenBuffers(1, &m_BufferHandle);
+			glBindBuffer(GL_UNIFORM_BUFFER, m_BufferHandle);
+			glBufferData(GL_UNIFORM_BUFFER, size, NULL, OpenGL::map_BufferUsage[(uint)BufferUsage::DYNAMIC]);
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		}
+
+		virtual ~OpenGLUniformBuffer() override {
+			glDeleteBuffers(1, &m_BufferHandle);
+		}
+
+		virtual void bind(uint bufferbinding) override {
+			glBindBufferRange(GL_UNIFORM_BUFFER, bufferbinding, m_BufferHandle, 0, c_BufferSize);
+		}
+
+		virtual void bufferData(const char* data) override {
+			glBindBuffer(GL_UNIFORM_BUFFER, m_BufferHandle);
+			glBufferSubData(GL_UNIFORM_BUFFER, 0, c_BufferSize, data);
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		}
+
+		virtual void bufferData(const uint offset, const uint size, const char* data) override {
+			glBindBuffer(GL_UNIFORM_BUFFER, m_BufferHandle);
+			glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		}
+
+	private:
+		const GLsizeiptr c_BufferSize;
+		GLuint m_BufferHandle;
+	};
 }
 
 

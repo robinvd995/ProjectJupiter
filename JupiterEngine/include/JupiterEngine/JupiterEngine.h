@@ -7,6 +7,9 @@
 #include "JupiterCore/JupiterCore.h"
 
 #include <PxPhysics.h>
+#include <foundation/PxVec2.h>
+#include <foundation/PxVec3.h>
+#include <foundation/PxVec4.h>
 
 // Logger function marcro's
 #ifdef JPT_ENGINE_ENABLE_LOGGER
@@ -76,15 +79,6 @@ friend class JupiterEngineApplication
 // Macro to define a manager class (source file)
 #define MANAGER_CLASS_DEFINITION(class_name) \
 class_name* class_name::s_Instance = nullptr
-
-// Typedefs of PhysX math classes for ease of use
-typedef physx::PxVec2 Vector2;
-typedef physx::PxVec3 Vector3;
-typedef physx::PxVec4 Vector4;
-typedef physx::PxQuat Quaternion;
-typedef physx::PxMat33 Matrix3_3;
-typedef physx::PxMat34 Matrix3_4;
-typedef physx::PxMat44 Matrix4_4;
 
 // ----- GLFW Input -----
 #ifdef JPT_ENABLE_GLFW_INPUT

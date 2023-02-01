@@ -4,6 +4,7 @@
 
 #include "Shader.h"
 #include "RenderBuffers.h"
+#include "Texture.h"
 
 #ifdef JPT_RENDER_BINDINGS_USE_DUMMY_BINDS
 #define JPT_RENDER_BINDINGS_DUMMY_FUNC(x) x
@@ -28,11 +29,13 @@ namespace Jupiter {
 	typedef void (*RenderFunc_SetClearColor)(float r, float g, float b, float a);
 	typedef void (*RenderFunc_Clear)();
 	typedef void (*RenderFunc_DrawElements)();
-	typedef void (*RenderFunc_DrawArrays)();
+	typedef void (*RenderFunc_DrawArrays)(uint first, uint size);
 //	typedef s_ptr<VertexArray> (*RenderFunc_CreateVertexArray)();
 	typedef s_ptr<VertexBuffer> (*RenderFunc_CreateVertexBuffer)(float* vertex_data, uint count, const VertexLayout& layout, VertexBufferSpecification& bufferSpec);
 	typedef s_ptr<IndexBuffer> (*RenderFunc_CreateIndexBuffer)(uint* vertex_data, uint count);
 	typedef s_ptr<Shader>(*RenderFunc_CreateShader)(ShaderLoadData& data);
+	typedef s_ptr<Texture>(*RenderFunc_CreateTexture)(TextureSource& source, TextureSpecification& spec);
+	typedef s_ptr<UniformBuffer>(*RenderFunc_CreateUniformBuffer)(uint size);
 
 	/// <summary>
 	/// Struct containing dummy functions that do nothing, makes sure that when no api has been bound the program does not crash
@@ -43,11 +46,13 @@ namespace Jupiter {
 		static void dummySetClearColor(float r, float g, float b, float a);
 		static void dummyClearFunc();
 		static void dummyDrawElements();
-		static void dummyDrawArrays();
+		static void dummyDrawArrays(uint first, uint size);
 //		static s_ptr<VertexArray> dummyCreateVertexArray();
 		static s_ptr<VertexBuffer> dummyCreateVertexBuffer(float*, uint, const VertexLayout&, VertexBufferSpecification&);
 		static s_ptr<IndexBuffer> dummyCreateIndexBuffer(uint*, uint);
 		static s_ptr<Shader> dummyCreateShader(ShaderLoadData& data);
+		static s_ptr<Texture> dummyCreateTexture(TextureSource& source, TextureSpecification& spec);
+		static s_ptr<UniformBuffer> dummyCreateUniformBuffer(uint);
 	};
 
 	/// <summary>
@@ -64,6 +69,8 @@ namespace Jupiter {
 		RenderFunc_CreateVertexBuffer m_CreateVertexBuffer = JPT_RENDER_BINDINGS_DUMMY_FUNC(GraphicsAPIDummy::dummyCreateVertexBuffer);
 		RenderFunc_CreateIndexBuffer m_CreateIndexBuffer = JPT_RENDER_BINDINGS_DUMMY_FUNC(GraphicsAPIDummy::dummyCreateIndexBuffer);
 		RenderFunc_CreateShader m_CreateShader = JPT_RENDER_BINDINGS_DUMMY_FUNC(GraphicsAPIDummy::dummyCreateShader);
+		RenderFunc_CreateTexture m_CreateTexture2D = JPT_RENDER_BINDINGS_DUMMY_FUNC(GraphicsAPIDummy::dummyCreateTexture);
+		RenderFunc_CreateUniformBuffer m_CreateUniformBuffer = JPT_RENDER_BINDINGS_DUMMY_FUNC(GraphicsAPIDummy::dummyCreateUniformBuffer);
 	};
 
 	/// <summary>
@@ -92,6 +99,7 @@ namespace Jupiter {
 		void clear();
 		
 		// ----- Set functions ----- 
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -111,7 +119,7 @@ namespace Jupiter {
 		void setClearColor(float r, float g, float b, float a);
 		
 		// ----- Draw functions -----
-		
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -120,7 +128,7 @@ namespace Jupiter {
 		/// <summary>
 		/// 
 		/// </summary>
-		void drawArrays();
+		void drawArrays(uint first, uint size);
 
 		// ----- Create functions ----- 
 
@@ -154,6 +162,16 @@ namespace Jupiter {
 		/// <param name="data"></param>
 		/// <returns></returns>
 		s_ptr<Shader> createShader(ShaderLoadData& data);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="source"></param>
+		/// <param name="spec"></param>
+		/// <returns></returns>
+		s_ptr<Texture> createTexture2D(TextureSource& source, TextureSpecification& spec);
+
+		s_ptr<UniformBuffer> createUniformBuffer(uint size);
 	}
 
 	/// <summary>

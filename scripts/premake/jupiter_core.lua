@@ -14,6 +14,7 @@ function createJupiterCore()
     defaultDefines()
 
     includeRapidXml()
+    includeStbImage()
 
     includeVulkan()
 

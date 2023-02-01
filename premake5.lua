@@ -64,6 +64,10 @@ function includeVulkan()
     includedirs "%{VULKAN_INCLUDE}"
 end
 
+function includeStbImage()
+    includedirs "external/stb_image"
+end
+
 function linkVulkanShaderC()
     filter "configurations:Debug"
     links "%{VULKAN_LIB}/shaderc_sharedd.lib"

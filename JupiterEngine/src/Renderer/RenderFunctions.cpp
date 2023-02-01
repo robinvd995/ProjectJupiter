@@ -27,7 +27,7 @@ namespace Jupiter {
 		JPT_ASSERT_FAIL("Graphics API function is not bound!"); 
 	}
 
-	void GraphicsAPIDummy::dummyDrawArrays() { 
+	void GraphicsAPIDummy::dummyDrawArrays(uint first, uint size) {
 		JPT_ASSERT_FAIL("Graphics API function is not bound!");
 	}
 
@@ -49,6 +49,16 @@ namespace Jupiter {
 	s_ptr<Shader> GraphicsAPIDummy::dummyCreateShader(ShaderLoadData& data) { 
 		JPT_ASSERT_FAIL("Graphics API function is not bound!");
 		return nullptr; 
+	}
+
+	s_ptr<Texture> GraphicsAPIDummy::dummyCreateTexture(TextureSource& source, TextureSpecification& spec) {
+		JPT_ASSERT_FAIL("Graphics API function is not bound!");
+		return nullptr;
+	}
+
+	s_ptr<UniformBuffer> GraphicsAPIDummy::dummyCreateUniformBuffer(uint size) {
+		JPT_ASSERT_FAIL("Graphics API function is not bound!");
+		return nullptr;
 	}
 
 	// Common functions
@@ -74,8 +84,8 @@ namespace Jupiter {
 		s_JupiterRenderBoundFunctions->m_DrawElementsFunc(); 
 	}
 
-	void RenderFunctions::drawArrays() { 
-		s_JupiterRenderBoundFunctions->m_DrawArraysFunc(); 
+	void RenderFunctions::drawArrays(uint first, uint size) {
+		s_JupiterRenderBoundFunctions->m_DrawArraysFunc(first, size); 
 	}
 
 	// Create functions
@@ -95,6 +105,14 @@ namespace Jupiter {
 		return s_JupiterRenderBoundFunctions->m_CreateShader(data); 
 	}
 
+	s_ptr<Texture> RenderFunctions::createTexture2D(TextureSource& source, TextureSpecification& spec) {
+		return s_JupiterRenderBoundFunctions->m_CreateTexture2D(source, spec);
+	}
+
+	s_ptr<UniformBuffer> RenderFunctions::createUniformBuffer(uint size) {
+		return s_JupiterRenderBoundFunctions->m_CreateUniformBuffer(size);
+	}
+
 	// Load bindings
 	void Jupiter::loadOpenGLBindings() {
 #ifdef JPT_ENABLE_OPENGL
@@ -108,6 +126,8 @@ namespace Jupiter {
 		s_JupiterRenderBoundFunctions->m_CreateVertexBuffer = OpenGL::createVertexBuffer;
 		s_JupiterRenderBoundFunctions->m_CreateIndexBuffer = OpenGL::createIndexBuffer;
 		s_JupiterRenderBoundFunctions->m_CreateShader = OpenGL::createShader;
+		s_JupiterRenderBoundFunctions->m_CreateTexture2D = OpenGL::createTexture2D;
+		s_JupiterRenderBoundFunctions->m_CreateUniformBuffer = OpenGL::createUniformBuffer;
 #else
 		JPT_ENGINE_ERROR("Trying to load OpenGL bindings while OpenGL is not available in this build!");
 #endif

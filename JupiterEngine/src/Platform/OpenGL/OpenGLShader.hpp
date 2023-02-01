@@ -55,6 +55,41 @@ namespace Jupiter {
 			glUseProgram(0);
 		}
 
+//		virtual void setInt(const std::string& name, const int value) override {
+//			GLuint location = glGetUniformLocation(m_ShaderId, name.c_str());
+//			glUniform1i(location, value);
+//		}
+//
+//		virtual void setFloat(const std::string& name, const float value) override {
+//			GLuint location = glGetUniformLocation(m_ShaderId, name.c_str());
+//			glUniform1f(location, value);
+//		}
+//
+//		virtual void setVec2f(const std::string& name, float* values) override {
+//			GLuint location = glGetUniformLocation(m_ShaderId, name.c_str());
+//			glUniform2f(location, values[0], values[1]);
+//		};
+//
+//		virtual void setVec3f(const std::string& name, float* values) override {
+//			GLuint location = glGetUniformLocation(m_ShaderId, name.c_str());
+//			glUniform3f(location, values[0], values[1], values[2]);
+//		};
+//
+//		virtual void setVec4f(const std::string& name, float* values) override {
+//			GLuint location = glGetUniformLocation(m_ShaderId, name.c_str());
+//			glUniform4f(location, values[0], values[1], values[2], values[3]);
+//		};
+//
+//		virtual void setMat33f(const std::string& name, float* values) override {
+//			GLuint location = glGetUniformLocation(m_ShaderId, name.c_str());
+//			glUniformMatrix3fv(location, 1, GL_FALSE, values);
+//		};
+//
+//		virtual void setMat44f(const std::string& name, float* values) override {
+//			GLuint location = glGetUniformLocation(m_ShaderId, name.c_str());
+//			glUniformMatrix4fv(location, 1, GL_FALSE, values);
+//		};
+
 	private:
 		bool compileShader(uint& shaderid, uint shadertype, const GLchar* source) {
 			shaderid = glCreateShader(shadertype);
