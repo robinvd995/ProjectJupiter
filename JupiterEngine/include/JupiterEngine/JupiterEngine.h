@@ -6,11 +6,6 @@
 #include "JupiterCore/JupiterCoreDefinitions.h"
 #include "JupiterCore/JupiterCore.h"
 
-#include <PxPhysics.h>
-#include <foundation/PxVec2.h>
-#include <foundation/PxVec3.h>
-#include <foundation/PxVec4.h>
-
 // Logger function marcro's
 #ifdef JPT_ENGINE_ENABLE_LOGGER
 #define JPT_ENGINE_INFO(msg, ...) Jupiter::Engine::n_EngineLogger->info(msg, __VA_ARGS__)

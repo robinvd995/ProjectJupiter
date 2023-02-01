@@ -5,6 +5,8 @@
 #include "Core/Layer.h"
 #include "Core/Window.h"
 
+#include "JupiterEngine/Scene/Scene.h"
+
 namespace Jupiter {
 
 	class JupiterEngineApplication {
