@@ -31,11 +31,11 @@ namespace Jupiter {
 	typedef void (*RenderFunc_DrawElements)();
 	typedef void (*RenderFunc_DrawArrays)(uint first, uint size);
 //	typedef s_ptr<VertexArray> (*RenderFunc_CreateVertexArray)();
-	typedef s_ptr<VertexBuffer> (*RenderFunc_CreateVertexBuffer)(float* vertex_data, uint count, const VertexLayout& layout, VertexBufferSpecification& bufferSpec);
-	typedef s_ptr<IndexBuffer> (*RenderFunc_CreateIndexBuffer)(uint* vertex_data, uint count);
-	typedef s_ptr<Shader>(*RenderFunc_CreateShader)(ShaderLoadData& data);
-	typedef s_ptr<Texture>(*RenderFunc_CreateTexture)(TextureSource& source, TextureSpecification& spec);
-	typedef s_ptr<UniformBuffer>(*RenderFunc_CreateUniformBuffer)(uint size);
+	typedef r_ptr<VertexBuffer> (*RenderFunc_CreateVertexBuffer)(float* vertex_data, uint count, const VertexLayout& layout, VertexBufferSpecification& bufferSpec);
+	typedef r_ptr<IndexBuffer> (*RenderFunc_CreateIndexBuffer)(uint* vertex_data, uint count);
+	typedef r_ptr<Shader>(*RenderFunc_CreateShader)(ShaderLoadData& data);
+	typedef r_ptr<Texture>(*RenderFunc_CreateTexture)(TextureSource& source, TextureSpecification& spec);
+	typedef r_ptr<UniformBuffer>(*RenderFunc_CreateUniformBuffer)(uint size);
 
 	/// <summary>
 	/// Struct containing dummy functions that do nothing, makes sure that when no api has been bound the program does not crash
@@ -48,11 +48,11 @@ namespace Jupiter {
 		static void dummyDrawElements();
 		static void dummyDrawArrays(uint first, uint size);
 //		static s_ptr<VertexArray> dummyCreateVertexArray();
-		static s_ptr<VertexBuffer> dummyCreateVertexBuffer(float*, uint, const VertexLayout&, VertexBufferSpecification&);
-		static s_ptr<IndexBuffer> dummyCreateIndexBuffer(uint*, uint);
-		static s_ptr<Shader> dummyCreateShader(ShaderLoadData& data);
-		static s_ptr<Texture> dummyCreateTexture(TextureSource& source, TextureSpecification& spec);
-		static s_ptr<UniformBuffer> dummyCreateUniformBuffer(uint);
+		static r_ptr<VertexBuffer> dummyCreateVertexBuffer(float*, uint, const VertexLayout&, VertexBufferSpecification&);
+		static r_ptr<IndexBuffer> dummyCreateIndexBuffer(uint*, uint);
+		static r_ptr<Shader> dummyCreateShader(ShaderLoadData& data);
+		static r_ptr<Texture> dummyCreateTexture(TextureSource& source, TextureSpecification& spec);
+		static r_ptr<UniformBuffer> dummyCreateUniformBuffer(uint);
 	};
 
 	/// <summary>
@@ -146,7 +146,7 @@ namespace Jupiter {
 		/// <param name="layout"></param>
 		/// <param name="bufferSpec"></param>
 		/// <returns></returns>
-		s_ptr<VertexBuffer> createVertexBuffer(float* vertex_data, uint count, const VertexLayout& layout, VertexBufferSpecification bufferSpec);
+		r_ptr<VertexBuffer> createVertexBuffer(float* vertex_data, uint count, const VertexLayout& layout, VertexBufferSpecification bufferSpec);
 
 		/// <summary>
 		/// 
@@ -154,14 +154,14 @@ namespace Jupiter {
 		/// <param name="index_data"></param>
 		/// <param name="count"></param>
 		/// <returns></returns>
-		s_ptr<IndexBuffer> createIndexBuffer(uint* index_data, uint count);
+		r_ptr<IndexBuffer> createIndexBuffer(uint* index_data, uint count);
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <param name="data"></param>
 		/// <returns></returns>
-		s_ptr<Shader> createShader(ShaderLoadData& data);
+		r_ptr<Shader> createShader(ShaderLoadData& data);
 
 		/// <summary>
 		/// 
@@ -169,9 +169,14 @@ namespace Jupiter {
 		/// <param name="source"></param>
 		/// <param name="spec"></param>
 		/// <returns></returns>
-		s_ptr<Texture> createTexture2D(TextureSource& source, TextureSpecification& spec);
+		r_ptr<Texture> createTexture2D(TextureSource& source, TextureSpecification& spec);
 
-		s_ptr<UniformBuffer> createUniformBuffer(uint size);
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="size"></param>
+		/// <returns></returns>
+		r_ptr<UniformBuffer> createUniformBuffer(uint size);
 	}
 
 	/// <summary>

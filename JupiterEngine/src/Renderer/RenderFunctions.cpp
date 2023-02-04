@@ -36,27 +36,27 @@ namespace Jupiter {
 //		return nullptr; 
 //	}
 
-	s_ptr<VertexBuffer> GraphicsAPIDummy::dummyCreateVertexBuffer(float*, uint, const VertexLayout&, VertexBufferSpecification&) {
+	r_ptr<VertexBuffer> GraphicsAPIDummy::dummyCreateVertexBuffer(float*, uint, const VertexLayout&, VertexBufferSpecification&) {
 		JPT_ASSERT_FAIL("Graphics API function is not bound!");
 		return nullptr;
 	}
 
-	s_ptr<IndexBuffer> GraphicsAPIDummy::dummyCreateIndexBuffer(uint*, uint) { 
+	r_ptr<IndexBuffer> GraphicsAPIDummy::dummyCreateIndexBuffer(uint*, uint) { 
 		JPT_ASSERT_FAIL("Graphics API function is not bound!"); 
 		return nullptr; 
 	}
 
-	s_ptr<Shader> GraphicsAPIDummy::dummyCreateShader(ShaderLoadData& data) { 
+	r_ptr<Shader> GraphicsAPIDummy::dummyCreateShader(ShaderLoadData& data) { 
 		JPT_ASSERT_FAIL("Graphics API function is not bound!");
 		return nullptr; 
 	}
 
-	s_ptr<Texture> GraphicsAPIDummy::dummyCreateTexture(TextureSource& source, TextureSpecification& spec) {
+	r_ptr<Texture> GraphicsAPIDummy::dummyCreateTexture(TextureSource& source, TextureSpecification& spec) {
 		JPT_ASSERT_FAIL("Graphics API function is not bound!");
 		return nullptr;
 	}
 
-	s_ptr<UniformBuffer> GraphicsAPIDummy::dummyCreateUniformBuffer(uint size) {
+	r_ptr<UniformBuffer> GraphicsAPIDummy::dummyCreateUniformBuffer(uint size) {
 		JPT_ASSERT_FAIL("Graphics API function is not bound!");
 		return nullptr;
 	}
@@ -93,23 +93,23 @@ namespace Jupiter {
 //		return s_JupiterRenderBoundFunctions->m_CreateVertexArray(); 
 //	}
 
-	s_ptr<VertexBuffer> RenderFunctions::createVertexBuffer(float* vertex_data, uint count, const VertexLayout& layout, VertexBufferSpecification bufferSpec) {
+	r_ptr<VertexBuffer> RenderFunctions::createVertexBuffer(float* vertex_data, uint count, const VertexLayout& layout, VertexBufferSpecification bufferSpec) {
 		return s_JupiterRenderBoundFunctions->m_CreateVertexBuffer(vertex_data, count, layout, bufferSpec);
 	}
 
-	s_ptr<IndexBuffer> RenderFunctions::createIndexBuffer(uint* index_data, uint count) { 
+	r_ptr<IndexBuffer> RenderFunctions::createIndexBuffer(uint* index_data, uint count) { 
 		return s_JupiterRenderBoundFunctions->m_CreateIndexBuffer(index_data, count); 
 	}
 
-	s_ptr<Shader> RenderFunctions::createShader(ShaderLoadData& data) { 
+	r_ptr<Shader> RenderFunctions::createShader(ShaderLoadData& data) { 
 		return s_JupiterRenderBoundFunctions->m_CreateShader(data); 
 	}
 
-	s_ptr<Texture> RenderFunctions::createTexture2D(TextureSource& source, TextureSpecification& spec) {
+	r_ptr<Texture> RenderFunctions::createTexture2D(TextureSource& source, TextureSpecification& spec) {
 		return s_JupiterRenderBoundFunctions->m_CreateTexture2D(source, spec);
 	}
 
-	s_ptr<UniformBuffer> RenderFunctions::createUniformBuffer(uint size) {
+	r_ptr<UniformBuffer> RenderFunctions::createUniformBuffer(uint size) {
 		return s_JupiterRenderBoundFunctions->m_CreateUniformBuffer(size);
 	}
 
